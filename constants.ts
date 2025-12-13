@@ -117,8 +117,8 @@ export const INITIAL_VIDEOS: Video[] = [
 ];
 
 export const INITIAL_SITE_IMAGES: SiteImages = {
-  homeHeroBg: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=2013&auto=format&fit=crop",
+  homeHeroBg: "https://oncevatancomtr.teimg.com/crop/1280x720/oncevatan-com-tr/uploads/2023/12/87855b59-09f9-4911-aeda-faa14bb99f9e.JPG",
   homeProfile: "https://picsum.photos/seed/vedat/600/600",
-  bioMain: "https://picsum.photos/seed/vedatbio/1200/600",
+  bioMain: "https://pbs.twimg.com/profile_images/1940808265455030272/NUnGsk4P_400x400.jpg",
   footerVideo: "https://cdn.coverr.co/videos/coverr-flowers-in-the-wind-4509/1080p.mp4"
 };
