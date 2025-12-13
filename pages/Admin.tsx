@@ -312,7 +312,7 @@ const Admin: React.FC = () => {
 
                 <div className="bg-black/20 p-6 rounded-lg border border-white/5">
                    <h3 className="text-lg font-serif text-white mb-4 flex items-center gap-2">
-                     <ImageIcon className="h-5 w-5 text-mystic-gold" /> Εικόνες Αρχικής Σελίδας
+                     <ImageIcon className="h-5 w-5 text-mystic-gold" /> Εικόνες & Video Site
                    </h3>
                    <div className="grid md:grid-cols-2 gap-6">
                       <div>
@@ -337,6 +337,17 @@ const Admin: React.FC = () => {
                            <img src={imagesForm.homeProfile} className="w-full h-full object-cover" alt="Profile Preview" />
                         </div>
                       </div>
+                   </div>
+                   
+                   <div className="mt-6 border-t border-white/10 pt-6">
+                      <label className="block text-gray-400 text-sm mb-2 text-mystic-gold">Footer Video URL (Sayfa Altı Video)</label>
+                      <input 
+                           placeholder="https://.../video.mp4"
+                           className="w-full bg-slate-800 border border-mystic-gold/30 rounded p-2 text-white mb-3"
+                           value={imagesForm.footerVideo || ''}
+                           onChange={e => setImagesForm({...imagesForm, footerVideo: e.target.value})}
+                      />
+                      <p className="text-xs text-gray-500">Video formatı MP4 olmalıdır. Doğrudan video dosyasına giden bir link kullanın.</p>
                    </div>
                 </div>
 

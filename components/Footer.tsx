@@ -1,10 +1,31 @@
+
 import React from 'react';
 import { Facebook, Instagram, Twitter, Mail } from 'lucide-react';
+import { useContent } from '../context/ContentContext';
 
 const Footer: React.FC = () => {
+  const { siteImages } = useContent();
+
   return (
-    <footer className="bg-slate-950 text-gray-400 py-12 border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="relative bg-slate-950 text-gray-400 py-12 border-t border-white/10 overflow-hidden">
+      {/* Background Video Layer */}
+      {siteImages.footerVideo && (
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-slate-950/80 z-10" /> {/* Overlay for readability */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-60"
+          >
+            <source src={siteImages.footerVideo} type="video/mp4" />
+          </video>
+        </div>
+      )}
+
+      {/* Footer Content */}
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-xl font-serif text-white mb-4">VEDAT DELEK</h3>

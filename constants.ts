@@ -78,7 +78,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description: "Αναλυτική συνεδρία για τον γενέθλιο χάρτη σας. Μάθετε τι προβλέπουν τα άστρα για την καριέρα, τα οικονομικά και τα αισθηματικά σας.",
     price: "150€",
     imageUrl: "https://i.etsystatic.com/62718937/r/il/57c8c4/7530939179/il_1588xN.7530939179_8g9w.jpg",
-    buyLink: "https://www.etsy.com/listing/4419539660/my-financial-situation-money-flow-tarot?sr_prefetch=1&pf_from=shop_home&ref=shop_home_active_8&dd=1&logging_key=57f534ac86d2b609f69ed8c94578af3200cd8920%3A4419539660", // Buraya ödeme linki gelecek
+    buyLink: "https://www.etsy.com/listing/4419539660/my-financial-situation-money-flow-tarot?sr_prefetch=1&pf_from=shop_home&ref=shop_home_active_8&dd=1&logging_key=57f534ac86d2b609f69ed8c94578af3200cd8920%3A4419539660", 
     buyButtonText: "Κλείστε Ραντεβού"
   },
   {
@@ -87,7 +87,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     description: "Το νέο βιβλίο του Vedat Delek. Ένας οδηγός για να βρείτε την αδελφή ψυχή σας μέσα από την κατανόηση των καρμικών δεσμών.",
     price: "22€",
     imageUrl: "https://i.etsystatic.com/62718937/r/il/57c8c4/7530939179/il_1588xN.7530939179_8g9w.jpg",
-    buyLink: "https://www.etsy.com/listing/4419537846/will-heshe-contact-me-tarot-reading?sr_prefetch=1&pf_from=shop_home&ref=shop_home_active_7&dd=1&logging_key=50bec22faad70c350360dcaaff2f606d75c8fc2d%3A4419537846", // Buraya kitap linki gelecek
+    buyLink: "https://www.etsy.com/listing/4419537846/will-heshe-contact-me-tarot-reading?sr_prefetch=1&pf_from=shop_home&ref=shop_home_active_7&dd=1&logging_key=50bec22faad70c350360dcaaff2f606d75c8fc2d%3A4419537846", 
     buyButtonText: "Αγορά Βιβλίου"
   },
   {
@@ -105,13 +105,13 @@ export const INITIAL_VIDEOS: Video[] = [
   {
     id: 1,
     title: "Προβλέψεις για την Τουρκία και την Ελλάδα",
-    youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Placeholder
+    youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 
     date: "10 Φεβ 2024"
   },
   {
     id: 2,
     title: "Συνέντευξη στο OPEN TV",
-    youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Placeholder
+    youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 
     date: "05 Ιαν 2024"
   }
 ];
@@ -119,5 +119,6 @@ export const INITIAL_VIDEOS: Video[] = [
 export const INITIAL_SITE_IMAGES: SiteImages = {
   homeHeroBg: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=2013&auto=format&fit=crop",
   homeProfile: "https://picsum.photos/seed/vedat/600/600",
-  bioMain: "https://picsum.photos/seed/vedatbio/1200/600"
+  bioMain: "https://picsum.photos/seed/vedatbio/1200/600",
+  footerVideo: "https://cdn.coverr.co/videos/coverr-flowers-in-the-wind-4509/1080p.mp4"
 };

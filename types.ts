@@ -36,6 +36,7 @@ export interface SiteImages {
   homeHeroBg: string;
   homeProfile: string;
   bioMain: string;
+  footerVideo?: string;
 }
 
 export enum LoadingState {
