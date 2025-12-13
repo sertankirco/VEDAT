@@ -2,22 +2,24 @@
 import React from 'react';
 import { useContent } from '../context/ContentContext';
 import { ShoppingBag, ExternalLink } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const Shop: React.FC = () => {
   const { products } = useContent();
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-serif text-mystic-dark font-bold mb-4">Κατάστημα (E-Shop)</h1>
-          <p className="text-slate-600 font-medium">Μοναδικά προϊόντα και υπηρεσίες επιλεγμένα από τον Vedat Delek.</p>
+          <h1 className="text-4xl md:text-5xl font-serif text-mystic-dark font-bold mb-4">{t.shop.title}</h1>
+          <p className="text-slate-600 font-medium">{t.shop.subtitle}</p>
         </div>
 
         {products.length === 0 ? (
           <div className="text-center text-slate-400 py-20">
             <ShoppingBag className="mx-auto h-16 w-16 mb-4 opacity-50" />
-            <p>Δεν υπάρχουν προϊόντα διαθέσιμα αυτή τη στιγμή.</p>
+            <p>{t.shop.empty}</p>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -46,7 +48,7 @@ const Shop: React.FC = () => {
                     className="w-full flex items-center justify-center gap-2 bg-mystic-dark hover:bg-blue-900 text-white font-bold py-4 px-4 rounded-lg transition-all transform hover:scale-[1.02] shadow-lg mt-auto"
                   >
                     <ShoppingBag className="h-5 w-5" />
-                    {product.buyButtonText || 'Αγορά / Κράτηση'}
+                    {product.buyButtonText || t.shop.buy}
                     <ExternalLink className="h-4 w-4 opacity-70 ml-1" />
                   </a>
                 </div>

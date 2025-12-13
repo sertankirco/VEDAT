@@ -3,17 +3,19 @@ import React, { useState } from 'react';
 import { useContent } from '../context/ContentContext';
 import { Calendar, ArrowRight, X } from 'lucide-react';
 import { BlogPost } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 const Blog: React.FC = () => {
   const { posts } = useContent();
+  const { t } = useLanguage();
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
 
   return (
     <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-serif text-mystic-dark font-bold mb-4">Αστρολογικό Blog</h1>
-          <p className="text-slate-600 font-medium">Νέα, άρθρα και συμβουλές από τον κόσμο των άστρων.</p>
+          <h1 className="text-4xl md:text-5xl font-serif text-mystic-dark font-bold mb-4">{t.blog.title}</h1>
+          <p className="text-slate-600 font-medium">{t.blog.subtitle}</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -44,7 +46,7 @@ const Blog: React.FC = () => {
                   onClick={() => setSelectedPost(post)}
                   className="flex items-center text-blue-600 text-sm font-bold hover:text-mystic-dark transition-colors mt-auto"
                 >
-                  Διαβάστε Περισσότερα <ArrowRight className="h-4 w-4 ml-1" />
+                  {t.blog.readMore} <ArrowRight className="h-4 w-4 ml-1" />
                 </button>
               </div>
             </article>

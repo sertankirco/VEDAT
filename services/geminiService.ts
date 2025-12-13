@@ -1,19 +1,23 @@
+
 import { GoogleGenAI } from "@google/genai";
+import { Language } from "../types";
 
 const apiKey = process.env.API_KEY || '';
 const ai = new GoogleGenAI({ apiKey });
 
-export const generateHoroscope = async (sign: string, timeframe: 'daily' | 'weekly' = 'daily'): Promise<string> => {
+export const generateHoroscope = async (sign: string, language: Language = 'el'): Promise<string> => {
   if (!apiKey) {
-    return "Η υπηρεσία προβλέψεων δεν είναι διαθέσιμη αυτή τη στιγμή (Missing API Key). Παρακαλώ δοκιμάστε αργότερα.";
+    return language === 'el' 
+      ? "Η υπηρεσία προβλέψεων δεν είναι διαθέσιμη αυτή τη στιγμή (Missing API Key)." 
+      : "Horoscope service is currently unavailable (Missing API Key).";
   }
 
   const prompt = `
-    Ενέργησε ως ο διάσημος αστρολόγος Βεντάτ Ντελέκ (Vedat Delek).
-    Γράψε μια ${timeframe === 'daily' ? 'ημερήσια' : 'εβδομαδιαία'} αστρολογική πρόβλεψη για το ζώδιο: ${sign}.
-    Η γλώσσα πρέπει να είναι Ελληνικά.
-    Το ύφος πρέπει να είναι μυστικιστικό, ενθαρρυντικό, αλλά και ρεαλιστικό, όπως το στυλ του Vedat Delek.
-    Μην βάλεις τίτλο, μόνο το κείμενο της πρόβλεψης. Περιόρισε την απάντηση σε περίπου 80-100 λέξεις.
+    Act as the famous astrologer Vedat Delek.
+    Write a daily astrological prediction for the zodiac sign: ${sign}.
+    The response language MUST be ${language === 'el' ? 'Greek (Ελληνικά)' : 'English'}.
+    The tone should be mystical, encouraging, yet realistic, matching Vedat Delek's style.
+    Do not include a title, just the prediction text. Limit the response to about 80-100 words.
   `;
 
   try {
@@ -22,24 +26,26 @@ export const generateHoroscope = async (sign: string, timeframe: 'daily' | 'week
       contents: prompt,
     });
     
-    return response.text || "Δεν μπορέσαμε να λάβουμε την πρόβλεψη. Παρακαλώ προσπαθήστε ξανά.";
+    return response.text || (language === 'el' ? "Δεν μπορέσαμε να λάβουμε την πρόβλεψη." : "Could not retrieve the prediction.");
   } catch (error) {
     console.error("Gemini API Error (Horoscope):", error);
-    // Return a generic friendly message instead of crashing or showing raw error codes
-    return "Τα άστρα είναι θολά αυτή τη στιγμή. Παρακαλώ προσπαθήστε ξανά σε λίγο.";
+    return language === 'el' 
+      ? "Τα άστρα είναι θολά αυτή τη στιγμή. Παρακαλώ προσπαθήστε ξανά σε λίγο."
+      : "The stars are cloudy right now. Please try again later.";
   }
 };
 
-export const askAstrologer = async (question: string): Promise<string> => {
+export const askAstrologer = async (question: string, language: Language = 'el'): Promise<string> => {
   if (!apiKey) {
-    return "Η υπηρεσία δεν είναι διαθέσιμη.";
+    return language === 'el' ? "Η υπηρεσία δεν είναι διαθέσιμη." : "Service unavailable.";
   }
 
   const prompt = `
-    Είσαι ο αστρολόγος Vedat Delek. Απάντησε στην παρακάτω ερώτηση ενός αναγνώστη στα Ελληνικά:
+    You are the astrologer Vedat Delek. Answer the following user question:
     "${question}"
     
-    Κράτα την απάντηση σύντομη (έως 150 λέξεις), σοφή και διαισθητική.
+    The response language MUST be ${language === 'el' ? 'Greek (Ελληνικά)' : 'English'}.
+    Keep the answer short (up to 150 words), wise, and intuitive.
   `;
 
   try {
@@ -47,9 +53,11 @@ export const askAstrologer = async (question: string): Promise<string> => {
       model: 'gemini-2.5-flash',
       contents: prompt,
     });
-    return response.text || "Δεν υπάρχει απάντηση.";
+    return response.text || (language === 'el' ? "Δεν υπάρχει απάντηση." : "No answer available.");
   } catch (error) {
     console.error("Gemini API Error (Ask):", error);
-    return "Συγγνώμη, υπήρξε ένα πρόβλημα στην επικοινωνία με τα άστρα. Δοκιμάστε ξανά.";
+    return language === 'el' 
+      ? "Συγγνώμη, υπήρξε ένα πρόβλημα στην επικοινωνία με τα άστρα." 
+      : "Sorry, there was a problem communicating with the stars.";
   }
 };

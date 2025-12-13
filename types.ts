@@ -1,7 +1,10 @@
 
+export type Language = 'el' | 'en';
+
 export interface ZodiacSign {
   id: string;
-  name: string;
+  name: string;     // Greek Name
+  nameEn: string;   // English Name
   dates: string;
   icon: string;
 }

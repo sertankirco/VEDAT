@@ -2,18 +2,18 @@
 import { ZodiacSign, BlogPost, Product, Video, SiteImages, SocialLinks } from './types';
 
 export const ZODIAC_SIGNS: ZodiacSign[] = [
-  { id: 'aries', name: 'Κριός', dates: '21 Μαρ - 19 Απρ', icon: '♈' },
-  { id: 'taurus', name: 'Ταύρος', dates: '20 Απρ - 20 Μαΐ', icon: '♉' },
-  { id: 'gemini', name: 'Δίδυμοι', dates: '21 Μαΐ - 20 Ιουν', icon: '♊' },
-  { id: 'cancer', name: 'Καρκίνος', dates: '21 Ιουν - 22 Ιουλ', icon: '♋' },
-  { id: 'leo', name: 'Λέων', dates: '23 Ιουλ - 22 Αυγ', icon: '♌' },
-  { id: 'virgo', name: 'Παρθένος', dates: '23 Αυγ - 22 Σεπ', icon: '♍' },
-  { id: 'libra', name: 'Ζυγός', dates: '23 Σεπ - 22 Οκτ', icon: '♎' },
-  { id: 'scorpio', name: 'Σκορπιός', dates: '23 Οκτ - 21 Νοε', icon: '♏' },
-  { id: 'sagittarius', name: 'Τοξότης', dates: '22 Νοε - 21 Δεκ', icon: '♐' },
-  { id: 'capricorn', name: 'Αιγόκερως', dates: '22 Δεκ - 19 Ιαν', icon: '♑' },
-  { id: 'aquarius', name: 'Υδροχόος', dates: '20 Ιαν - 18 Φεβ', icon: '♒' },
-  { id: 'pisces', name: 'Ιχθύες', dates: '19 Φεβ - 20 Μαρ', icon: '♓' },
+  { id: 'aries', name: 'Κριός', nameEn: 'Aries', dates: '21 Μαρ - 19 Απρ', icon: '♈' },
+  { id: 'taurus', name: 'Ταύρος', nameEn: 'Taurus', dates: '20 Απρ - 20 Μαΐ', icon: '♉' },
+  { id: 'gemini', name: 'Δίδυμοι', nameEn: 'Gemini', dates: '21 Μαΐ - 20 Ιουν', icon: '♊' },
+  { id: 'cancer', name: 'Καρκίνος', nameEn: 'Cancer', dates: '21 Ιουν - 22 Ιουλ', icon: '♋' },
+  { id: 'leo', name: 'Λέων', nameEn: 'Leo', dates: '23 Ιουλ - 22 Αυγ', icon: '♌' },
+  { id: 'virgo', name: 'Παρθένος', nameEn: 'Virgo', dates: '23 Αυγ - 22 Σεπ', icon: '♍' },
+  { id: 'libra', name: 'Ζυγός', nameEn: 'Libra', dates: '23 Σεπ - 22 Οκτ', icon: '♎' },
+  { id: 'scorpio', name: 'Σκορπιός', nameEn: 'Scorpio', dates: '23 Οκτ - 21 Νοε', icon: '♏' },
+  { id: 'sagittarius', name: 'Τοξότης', nameEn: 'Sagittarius', dates: '22 Νοε - 21 Δεκ', icon: '♐' },
+  { id: 'capricorn', name: 'Αιγόκερως', nameEn: 'Capricorn', dates: '22 Δεκ - 19 Ιαν', icon: '♑' },
+  { id: 'aquarius', name: 'Υδροχόος', nameEn: 'Aquarius', dates: '20 Ιαν - 18 Φεβ', icon: '♒' },
+  { id: 'pisces', name: 'Ιχθύες', nameEn: 'Pisces', dates: '19 Φεβ - 20 Μαρ', icon: '♓' },
 ];
 
 export const INITIAL_POSTS: BlogPost[] = [

@@ -2,9 +2,11 @@
 import React from 'react';
 import { Facebook, Instagram, Twitter, Mail } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const Footer: React.FC = () => {
   const { siteImages, socialLinks } = useContent();
+  const { t } = useLanguage();
 
   return (
     <footer className="relative bg-mystic-dark text-white py-12 border-t border-blue-900 overflow-hidden">
@@ -31,20 +33,20 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-serif text-white font-bold mb-4">VEDAT DELEK</h3>
             <p className="mb-4 text-sm leading-relaxed text-blue-100">
-              Ο διάσημος αστρολόγος που εμπιστεύονται χιλιάδες άνθρωποι σε Ελλάδα και Τουρκία για τις ακριβείς προβλέψεις του.
+              {t.footer.about}
             </p>
           </div>
           <div>
-            <h3 className="text-lg font-serif text-white font-bold mb-4">Γρήγορη Πρόσβαση</h3>
+            <h3 className="text-lg font-serif text-white font-bold mb-4">{t.footer.quickAccess}</h3>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-mystic-blue transition font-medium text-blue-100">Ημερήσιες Προβλέψεις</a></li>
-              <li><a href="#" className="hover:text-mystic-blue transition font-medium text-blue-100">Ετήσιες Προβλέψεις 2024</a></li>
-              <li><a href="#" className="hover:text-mystic-blue transition font-medium text-blue-100">Συνεδρίες</a></li>
-              <li><a href="#" className="hover:text-mystic-blue transition font-medium text-blue-100">Βιβλία</a></li>
+              <li><a href="#/horoscope" className="hover:text-mystic-blue transition font-medium text-blue-100">{t.nav.horoscope}</a></li>
+              <li><a href="#/biography" className="hover:text-mystic-blue transition font-medium text-blue-100">{t.nav.bio}</a></li>
+              <li><a href="#/shop" className="hover:text-mystic-blue transition font-medium text-blue-100">{t.nav.shop}</a></li>
+              <li><a href="#/blog" className="hover:text-mystic-blue transition font-medium text-blue-100">{t.nav.blog}</a></li>
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-serif text-white font-bold mb-4">Επικοινωνία</h3>
+            <h3 className="text-lg font-serif text-white font-bold mb-4">{t.footer.contact}</h3>
             <div className="flex space-x-4 mb-4 text-white">
               {socialLinks.instagram && (
                 <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-mystic-blue transition"><Instagram className="h-6 w-6" /></a>
@@ -63,7 +65,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-blue-800 text-center text-xs text-blue-300">
-          <p>&copy; {new Date().getFullYear()} Vedat Delek Astrology. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {t.footer.rights}</p>
         </div>
       </div>
     </footer>

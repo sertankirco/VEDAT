@@ -1,19 +1,21 @@
 
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Star, ShoppingBag, Lock, Video } from 'lucide-react';
+import { Menu, X, Star, ShoppingBag, Lock, Video, Globe } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { language, toggleLanguage, t } = useLanguage();
 
   const navLinks = [
-    { path: '/', label: 'Αρχική' },
-    { path: '/biography', label: 'Βιογραφία' },
-    { path: '/horoscope', label: 'Προβλέψεις' },
-    { path: '/blog', label: 'Blog' },
-    { path: '/videos', label: 'Βίντεο', icon: <Video className="w-4 h-4 inline mr-1" /> },
-    { path: '/shop', label: 'Κατάστημα', icon: <ShoppingBag className="w-4 h-4 inline mr-1" /> },
+    { path: '/', label: t.nav.home },
+    { path: '/biography', label: t.nav.bio },
+    { path: '/horoscope', label: t.nav.horoscope },
+    { path: '/blog', label: t.nav.blog },
+    { path: '/videos', label: t.nav.videos, icon: <Video className="w-4 h-4 inline mr-1" /> },
+    { path: '/shop', label: t.nav.shop, icon: <ShoppingBag className="w-4 h-4 inline mr-1" /> },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -30,7 +32,7 @@ const Navbar: React.FC = () => {
           </div>
           
           <div className="hidden md:block">
-            <div className="ml-10 flex items-center space-x-8">
+            <div className="ml-10 flex items-center space-x-6">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
@@ -45,6 +47,16 @@ const Navbar: React.FC = () => {
                   {link.label}
                 </Link>
               ))}
+              
+              <button
+                onClick={toggleLanguage}
+                className="flex items-center gap-1 px-3 py-1 rounded-full bg-blue-50 hover:bg-blue-100 text-mystic-dark font-bold text-xs border border-blue-200 transition-colors"
+                title="Change Language"
+              >
+                <Globe className="w-3 h-3" />
+                {language === 'el' ? 'EN' : 'GR'}
+              </button>
+
               <Link 
                 to="/admin" 
                 className="text-gray-400 hover:text-mystic-dark transition-colors"
@@ -55,7 +67,13 @@ const Navbar: React.FC = () => {
             </div>
           </div>
 
-          <div className="-mr-2 flex md:hidden">
+          <div className="flex items-center gap-4 md:hidden">
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center gap-1 px-3 py-1 rounded-full bg-blue-50 text-mystic-dark font-bold text-xs border border-blue-200"
+            >
+              {language === 'el' ? 'EN' : 'GR'}
+            </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-mystic-dark hover:bg-blue-50 focus:outline-none"
@@ -89,7 +107,7 @@ const Navbar: React.FC = () => {
               onClick={() => setIsOpen(false)}
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:bg-gray-100"
             >
-              Διαχείριση (Admin)
+              {t.nav.admin}
             </Link>
           </div>
         </div>

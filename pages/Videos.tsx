@@ -2,16 +2,17 @@
 import React from 'react';
 import { useContent } from '../context/ContentContext';
 import { PlayCircle, Calendar, AlertCircle } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const Videos: React.FC = () => {
   const { videos } = useContent();
+  const { t } = useLanguage();
 
   const getEmbedUrl = (url: string) => {
     if (!url) return null;
 
     try {
       // Regular expression to extract video ID from almost any YouTube URL
-      // Supports: watch?v=, youtu.be/, embed/, shorts/, v/
       const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
       const match = url.match(regExp);
 
@@ -30,14 +31,14 @@ const Videos: React.FC = () => {
     <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-serif text-mystic-dark font-bold mb-4">Βίντεο & Συνεντεύξεις</h1>
-          <p className="text-slate-600 font-medium">Παρακολουθήστε τις τελευταίες τηλεοπτικές εμφανίσεις και προβλέψεις.</p>
+          <h1 className="text-4xl md:text-5xl font-serif text-mystic-dark font-bold mb-4">{t.videos.title}</h1>
+          <p className="text-slate-600 font-medium">{t.videos.subtitle}</p>
         </div>
 
         {videos.length === 0 ? (
           <div className="text-center text-slate-400 py-20">
             <PlayCircle className="mx-auto h-16 w-16 mb-4 opacity-50" />
-            <p>Δεν υπάρχουν βίντεο διαθέσιμα αυτή τη στιγμή.</p>
+            <p>{t.videos.empty}</p>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">

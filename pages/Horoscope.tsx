@@ -5,11 +5,13 @@ import { ZODIAC_SIGNS } from '../constants';
 import { generateHoroscope, askAstrologer } from '../services/geminiService';
 import { Sparkles, RefreshCw, MessageCircle } from 'lucide-react';
 import { LoadingState } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 const Horoscope: React.FC = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const initialSignId = queryParams.get('sign') || 'aries';
+  const { language, t } = useLanguage();
 
   const [selectedSignId, setSelectedSignId] = useState(initialSignId);
   const [prediction, setPrediction] = useState('');
@@ -24,22 +26,24 @@ const Horoscope: React.FC = () => {
 
   const fetchHoroscope = async (signName: string) => {
     setLoadingState(LoadingState.LOADING);
-    const result = await generateHoroscope(signName);
+    const result = await generateHoroscope(signName, language);
     setPrediction(result);
     setLoadingState(LoadingState.SUCCESS);
   };
 
   useEffect(() => {
     if (selectedSign) {
-      fetchHoroscope(selectedSign.name);
+      // Use English or Greek name for prompt based on language to help Gemini context
+      const signName = language === 'en' ? selectedSign.nameEn : selectedSign.name;
+      fetchHoroscope(signName);
     }
-  }, [selectedSignId]);
+  }, [selectedSignId, language]); // Re-fetch when language changes
 
   const handleAsk = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!question.trim()) return;
     setAskingState(LoadingState.LOADING);
-    const result = await askAstrologer(question);
+    const result = await askAstrologer(question, language);
     setAnswer(result);
     setAskingState(LoadingState.SUCCESS);
   };
@@ -50,8 +54,8 @@ const Horoscope: React.FC = () => {
         
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-serif text-mystic-dark font-bold mb-4">Ημερήσιες Προβλέψεις</h1>
-          <p className="text-slate-600 font-medium">Επιλέξτε το ζώδιό σας και δείτε τι λένε τα άστρα σήμερα.</p>
+          <h1 className="text-4xl md:text-5xl font-serif text-mystic-dark font-bold mb-4">{t.horoscope.title}</h1>
+          <p className="text-slate-600 font-medium">{t.horoscope.subtitle}</p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -59,7 +63,7 @@ const Horoscope: React.FC = () => {
           {/* Sign Selector Sidebar */}
           <div className="lg:col-span-1">
             <div className="bg-white border border-blue-100 shadow-xl rounded-xl p-6 sticky top-24">
-              <h3 className="text-xl font-serif text-mystic-dark font-bold mb-6 border-b border-blue-100 pb-4">Επιλέξτε Ζώδιο</h3>
+              <h3 className="text-xl font-serif text-mystic-dark font-bold mb-6 border-b border-blue-100 pb-4">{t.horoscope.selectSign}</h3>
               <div className="grid grid-cols-2 gap-2">
                 {ZODIAC_SIGNS.map((sign) => (
                   <button
@@ -72,7 +76,7 @@ const Horoscope: React.FC = () => {
                     }`}
                   >
                     <span>{sign.icon}</span>
-                    <span className="text-sm">{sign.name}</span>
+                    <span className="text-sm">{language === 'en' ? sign.nameEn : sign.name}</span>
                   </button>
                 ))}
               </div>
@@ -95,7 +99,7 @@ const Horoscope: React.FC = () => {
                       {selectedSign.icon}
                     </div>
                     <div>
-                      <h2 className="text-3xl font-serif text-mystic-dark font-bold">{selectedSign.name}</h2>
+                      <h2 className="text-3xl font-serif text-mystic-dark font-bold">{language === 'en' ? selectedSign.nameEn : selectedSign.name}</h2>
                       <p className="text-blue-600 font-medium">{selectedSign.dates}</p>
                     </div>
                   </div>
@@ -116,12 +120,15 @@ const Horoscope: React.FC = () => {
 
                   <div className="mt-8 flex justify-end">
                     <button 
-                      onClick={() => fetchHoroscope(selectedSign.name)}
+                      onClick={() => {
+                        const signName = language === 'en' ? selectedSign.nameEn : selectedSign.name;
+                        fetchHoroscope(signName);
+                      }}
                       className="flex items-center gap-2 text-sm text-blue-600 hover:text-mystic-dark transition-colors font-bold"
                       disabled={loadingState === LoadingState.LOADING}
                     >
                       <RefreshCw className={`h-4 w-4 ${loadingState === LoadingState.LOADING ? 'animate-spin' : ''}`} />
-                      Ανανέωση Πρόβλεψης
+                      {t.horoscope.refresh}
                     </button>
                   </div>
                 </>
@@ -132,17 +139,17 @@ const Horoscope: React.FC = () => {
             <div className="bg-blue-50 border border-blue-100 rounded-xl p-8 shadow-md">
               <div className="flex items-center gap-3 mb-6">
                 <MessageCircle className="h-6 w-6 text-mystic-dark" />
-                <h3 className="text-2xl font-serif text-mystic-dark font-bold">Ρωτήστε τον AI Βεντάτ</h3>
+                <h3 className="text-2xl font-serif text-mystic-dark font-bold">{t.horoscope.askTitle}</h3>
               </div>
               <p className="text-slate-600 mb-6 text-sm font-medium">
-                Έχετε μια συγκεκριμένη ερώτηση; Χρησιμοποιήστε την τεχνητή νοημοσύνη για να λάβετε μια συμβουλή βασισμένη στη φιλοσοφία του Βεντάτ Ντελέκ.
+                {t.horoscope.askDesc}
               </p>
               
               <form onSubmit={handleAsk} className="space-y-4">
                 <textarea
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
-                  placeholder="Π.χ. Θα έχω επαγγελματική επιτυχία αυτό το μήνα;"
+                  placeholder={t.horoscope.askPlaceholder}
                   className="w-full bg-white border border-blue-200 rounded-lg p-4 text-mystic-dark placeholder-slate-400 focus:outline-none focus:border-mystic-dark shadow-inner h-32 resize-none"
                 />
                 <button
@@ -150,13 +157,13 @@ const Horoscope: React.FC = () => {
                   disabled={askingState === LoadingState.LOADING || !question.trim()}
                   className="w-full py-3 bg-mystic-dark hover:bg-blue-900 text-white font-bold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
                 >
-                  {askingState === LoadingState.LOADING ? 'Λήψη απάντησης...' : 'Ρώτησε τα Άστρα'}
+                  {askingState === LoadingState.LOADING ? t.horoscope.loading : t.horoscope.askButton}
                 </button>
               </form>
 
               {answer && (
                 <div className="mt-6 p-4 bg-white rounded-lg border border-blue-200 animate-fade-in shadow">
-                   <h4 className="text-mystic-dark font-bold font-serif mb-2">Απάντηση:</h4>
+                   <h4 className="text-mystic-dark font-bold font-serif mb-2">{t.horoscope.answer}</h4>
                    <p className="text-slate-700 italic">{answer}</p>
                 </div>
               )}
