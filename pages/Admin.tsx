@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useContent } from '../context/ContentContext';
-import { Trash2, Plus, Edit, Save, X, Lock, Video as VideoIcon, Settings, Image as ImageIcon } from 'lucide-react';
-import { Product, BlogPost, Video, SiteImages } from '../types';
+import { Trash2, Plus, Edit, Save, X, Lock, Video as VideoIcon, Settings, Image as ImageIcon, Github, UploadCloud } from 'lucide-react';
+import { Product, BlogPost, Video, SiteImages, GithubConfig } from '../types';
+import { generateFileContent, updateGithubFile } from '../services/githubService';
 
 const Admin: React.FC = () => {
   const { 
@@ -26,14 +28,57 @@ const Admin: React.FC = () => {
   const [videoForm, setVideoForm] = useState<Partial<Video>>({});
   const [imagesForm, setImagesForm] = useState<SiteImages>(siteImages);
 
+  // Github State
+  const [githubConfig, setGithubConfig] = useState<GithubConfig>({
+    owner: '',
+    repo: '',
+    token: ''
+  });
+  const [isPublishing, setIsPublishing] = useState(false);
+
+  // Load GitHub config from local storage on mount
+  useEffect(() => {
+    const savedConfig = localStorage.getItem('astro_github_config');
+    if (savedConfig) {
+      setGithubConfig(JSON.parse(savedConfig));
+    }
+  }, []);
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple mock authentication for demo
     if (password === 'admin123' || password === 'admin') {
       setIsAuthenticated(true);
     } else {
       alert('Λάθος κωδικός (Δοκιμάστε: admin123)');
     }
+  };
+
+  const handlePublishToGithub = async () => {
+    if (!githubConfig.owner || !githubConfig.repo || !githubConfig.token) {
+      alert('Παρακαλώ συμπληρώστε τις ρυθμίσεις GitHub στο tab "Ρυθμίσεις" πρώτα.');
+      setActiveTab('settings');
+      return;
+    }
+
+    if (!window.confirm('Είστε σίγουροι; Αυτό θα ενημερώσει τον κώδικα στο GitHub και θα ξεκινήσει deploy.')) {
+      return;
+    }
+
+    setIsPublishing(true);
+    try {
+      const content = generateFileContent(posts, products, videos, siteImages);
+      await updateGithubFile(githubConfig, content);
+      alert('Επιτυχία! Οι αλλαγές αποθηκεύτηκαν στο GitHub. Το site θα ενημερωθεί σε λίγα λεπτά.');
+    } catch (error: any) {
+      alert('Σφάλμα: ' + error.message);
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
+  const saveGithubConfig = () => {
+    localStorage.setItem('astro_github_config', JSON.stringify(githubConfig));
+    alert('Οι ρυθμίσεις GitHub αποθηκεύτηκαν στο πρόγραμμα περιήγησης.');
   };
 
   if (!isAuthenticated) {
@@ -115,7 +160,6 @@ const Admin: React.FC = () => {
   const handleSaveVideo = () => {
     if (!videoForm.title || !videoForm.youtubeUrl) return alert('Συμπληρώστε τίτλο και YouTube Link');
     
-    // Looser verification to allow various YT formats
     if (!videoForm.youtubeUrl.includes('youtu')) {
       alert('Παρακαλώ εισάγετε έγκυρο σύνδεσμο YouTube');
       return;
@@ -132,15 +176,30 @@ const Admin: React.FC = () => {
 
   const handleSaveImages = () => {
     updateSiteImages(imagesForm);
-    alert('Οι εικόνες του site ενημερώθηκαν επιτυχώς!');
+    alert('Οι εικόνες του site ενημερώθηκαν επιτυχώς! Μην ξεχάσετε να πατήσετε "Δημοσίευση στο Site" για μόνιμη αποθήκευση.');
   };
 
   return (
     <div className="min-h-screen bg-mystic-dark py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
           <h1 className="text-3xl font-serif text-white">Πίνακας Ελέγχου</h1>
-          <button onClick={() => setIsAuthenticated(false)} className="text-gray-400 hover:text-white">Έξοδος</button>
+          
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={handlePublishToGithub}
+              disabled={isPublishing}
+              className={`flex items-center gap-2 px-6 py-2 rounded-lg font-bold transition-colors shadow-lg shadow-mystic-gold/10 ${
+                isPublishing 
+                  ? 'bg-gray-600 cursor-not-allowed text-gray-300' 
+                  : 'bg-gradient-to-r from-mystic-gold to-amber-600 hover:from-amber-500 hover:to-amber-700 text-white'
+              }`}
+            >
+              <UploadCloud className={`h-5 w-5 ${isPublishing ? 'animate-bounce' : ''}`} />
+              {isPublishing ? 'Δημοσίευση...' : 'Δημοσίευση στο Site'}
+            </button>
+            <button onClick={() => setIsAuthenticated(false)} className="text-gray-400 hover:text-white text-sm">Έξοδος</button>
+          </div>
         </div>
 
         {/* Tabs */}
@@ -186,7 +245,7 @@ const Admin: React.FC = () => {
             <h2 className="text-xl text-white font-semibold capitalize">
               {activeTab === 'products' ? 'Λίστα Προϊόντων' : 
                activeTab === 'blog' ? 'Λίστα Άρθρων' : 
-               activeTab === 'videos' ? 'Λίστα Βίντεο' : 'Ρυθμίσεις Εικόνων Site'}
+               activeTab === 'videos' ? 'Λίστα Βίντεο' : 'Ρυθμίσεις Συστήματος'}
             </h2>
             {activeTab !== 'settings' && (
               <button
@@ -201,6 +260,56 @@ const Admin: React.FC = () => {
           {/* SETTINGS FORM */}
           {activeTab === 'settings' && (
              <div className="grid gap-8 animate-fade-in">
+                
+                {/* GitHub Configuration */}
+                <div className="bg-black/20 p-6 rounded-lg border border-white/5 relative overflow-hidden">
+                   <div className="absolute top-0 right-0 p-4 opacity-5">
+                      <Github className="w-32 h-32 text-white" />
+                   </div>
+                   <h3 className="text-lg font-serif text-white mb-4 flex items-center gap-2">
+                     <Github className="h-5 w-5 text-mystic-gold" /> Σύνδεση GitHub (Για Αυτόματη Δημοσίευση)
+                   </h3>
+                   <p className="text-sm text-gray-400 mb-4">
+                     Για να αποθηκεύονται οι αλλαγές μόνιμα και να ενημερώνεται το site αυτόματα, εισάγετε τα στοιχεία του GitHub Repository.
+                   </p>
+                   <div className="grid md:grid-cols-3 gap-4 mb-4">
+                      <div>
+                        <label className="block text-gray-400 text-xs mb-1">GitHub Username (Owner)</label>
+                        <input 
+                           className="w-full bg-slate-800 border border-white/10 rounded p-2 text-white text-sm"
+                           placeholder="π.χ. username"
+                           value={githubConfig.owner}
+                           onChange={e => setGithubConfig({...githubConfig, owner: e.target.value})}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 text-xs mb-1">Repository Name</label>
+                        <input 
+                           className="w-full bg-slate-800 border border-white/10 rounded p-2 text-white text-sm"
+                           placeholder="π.χ. vedat-astrology"
+                           value={githubConfig.repo}
+                           onChange={e => setGithubConfig({...githubConfig, repo: e.target.value})}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 text-xs mb-1">Personal Access Token (Classic)</label>
+                        <input 
+                           type="password"
+                           className="w-full bg-slate-800 border border-white/10 rounded p-2 text-white text-sm"
+                           placeholder="ghp_..."
+                           value={githubConfig.token}
+                           onChange={e => setGithubConfig({...githubConfig, token: e.target.value})}
+                        />
+                      </div>
+                   </div>
+                   <button 
+                      onClick={saveGithubConfig}
+                      className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded transition-colors"
+                   >
+                     Αποθήκευση Ρυθμίσεων GitHub
+                   </button>
+                </div>
+
                 <div className="bg-black/20 p-6 rounded-lg border border-white/5">
                    <h3 className="text-lg font-serif text-white mb-4 flex items-center gap-2">
                      <ImageIcon className="h-5 w-5 text-mystic-gold" /> Εικόνες Αρχικής Σελίδας
@@ -253,7 +362,7 @@ const Admin: React.FC = () => {
                       onClick={handleSaveImages}
                       className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition-colors flex items-center gap-2"
                    >
-                     <Save className="h-5 w-5" /> Αποθήκευση Αλλαγών
+                     <Save className="h-5 w-5" /> Αποθήκευση Εικόνων
                    </button>
                 </div>
              </div>
@@ -281,7 +390,7 @@ const Admin: React.FC = () => {
                         onChange={e => setProductForm({...productForm, title: e.target.value})}
                       />
                     </div>
-                    {/* ... other product fields omitted for brevity if unchanged, but included full context ... */}
+                    
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-gray-400 text-sm mb-1">Τιμή</label>
@@ -335,7 +444,7 @@ const Admin: React.FC = () => {
                     </div>
 
                     <button onClick={handleSaveProduct} className="bg-green-600 text-white p-2 rounded hover:bg-green-700 flex justify-center items-center gap-2">
-                      <Save className="h-4 w-4" /> Αποθήκευση Προϊόντος
+                      <Save className="h-4 w-4" /> Προσωρινή Αποθήκευση
                     </button>
                   </>
                 )}
@@ -367,7 +476,7 @@ const Admin: React.FC = () => {
                       onChange={e => setPostForm({...postForm, content: e.target.value})}
                     />
                     <button onClick={handleSavePost} className="bg-green-600 text-white p-2 rounded hover:bg-green-700 flex justify-center items-center gap-2">
-                      <Save className="h-4 w-4" /> Αποθήκευση Άρθρου
+                      <Save className="h-4 w-4" /> Προσωρινή Αποθήκευση
                     </button>
                   </>
                 )}
@@ -396,7 +505,7 @@ const Admin: React.FC = () => {
                       </p>
                     </div>
                     <button onClick={handleSaveVideo} className="bg-green-600 text-white p-2 rounded hover:bg-green-700 flex justify-center items-center gap-2">
-                      <Save className="h-4 w-4" /> Αποθήκευση Βίντεο
+                      <Save className="h-4 w-4" /> Προσωρινή Αποθήκευση
                     </button>
                   </>
                 )}

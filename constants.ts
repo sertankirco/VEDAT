@@ -1,3 +1,4 @@
+
 import { ZodiacSign, BlogPost, Product, Video, SiteImages } from './types';
 
 export const ZODIAC_SIGNS: ZodiacSign[] = [
@@ -73,30 +74,30 @@ export const INITIAL_POSTS: BlogPost[] = [
 export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 1,
-    title: "Καρμικός Χάρτης - Προσωπική Ανάλυση",
-    description: "Μια πλήρης γραπτή ανάλυση του γενέθλιου χάρτη σας με έμφαση στο κάρμα και τους δεσμούς της Σελήνης.",
-    price: "120€",
-    imageUrl: "https://picsum.photos/seed/chart/800/600",
-    buyLink: "#contact",
+    title: "Προσωπικός Αστρολογικός Χάρτης",
+    description: "Αναλυτική συνεδρία για τον γενέθλιο χάρτη σας. Μάθετε τι προβλέπουν τα άστρα για την καριέρα, τα οικονομικά και τα αισθηματικά σας.",
+    price: "150€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/57c8c4/7530939179/il_1588xN.7530939179_8g9w.jpg",
+    buyLink: "https://www.etsy.com/listing/4419539660/my-financial-situation-money-flow-tarot?sr_prefetch=1&pf_from=shop_home&ref=shop_home_active_8&dd=1&logging_key=57f534ac86d2b609f69ed8c94578af3200cd8920%3A4419539660", // Buraya ödeme linki gelecek
     buyButtonText: "Κλείστε Ραντεβού"
   },
   {
     id: 2,
-    title: "Βιβλίο: Τα Μυστικά των Άστρων",
-    description: "Το best-seller βιβλίο του Vedat Delek που εξηγεί την επίδραση των πλανητών στην καθημερινότητά μας.",
-    price: "25€",
-    imageUrl: "https://picsum.photos/seed/book/800/600",
-    buyLink: "#book",
+    title: "Βιβλίο: Το Κάρμα της Αγάπης",
+    description: "Το νέο βιβλίο του Vedat Delek. Ένας οδηγός για να βρείτε την αδελφή ψυχή σας μέσα από την κατανόηση των καρμικών δεσμών.",
+    price: "22€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/57c8c4/7530939179/il_1588xN.7530939179_8g9w.jpg",
+    buyLink: "https://www.etsy.com/listing/4419537846/will-heshe-contact-me-tarot-reading?sr_prefetch=1&pf_from=shop_home&ref=shop_home_active_7&dd=1&logging_key=50bec22faad70c350360dcaaff2f606d75c8fc2d%3A4419537846", // Buraya kitap linki gelecek
     buyButtonText: "Αγορά Βιβλίου"
   },
   {
     id: 3,
-    title: "Ενεργειακό Βραχιόλι Προστασίας",
-    description: "Χειροποίητο βραχιόλι με ημιπολύτιμους λίθους ενεργοποιημένο για προστασία από την αρνητική ενέργεια.",
-    price: "45€",
-    imageUrl: "https://picsum.photos/seed/jewelry/800/600",
-    buyLink: "#shop",
-    buyButtonText: "Αγορά"
+    title: "Ετήσια Πρόβλεψη 2025 (PDF)",
+    description: "Γραπτή ανάλυση 20 σελίδων ειδικά για το ζώδιο και τον ωροσκόπο σας. Αποστέλλεται στο email σας.",
+    price: "60€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/57c8c4/7530939179/il_1588xN.7530939179_8g9w.jpg",
+    buyLink: "#", 
+    buyButtonText: "Παραγγελία"
   }
 ];
 
@@ -116,7 +117,7 @@ export const INITIAL_VIDEOS: Video[] = [
 ];
 
 export const INITIAL_SITE_IMAGES: SiteImages = {
-  homeHeroBg: "https://picsum.photos/seed/nebula/1920/1080",
+  homeHeroBg: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=2013&auto=format&fit=crop",
   homeProfile: "https://picsum.photos/seed/vedat/600/600",
   bioMain: "https://picsum.photos/seed/vedatbio/1200/600"
 };

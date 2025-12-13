@@ -1,3 +1,4 @@
+
 export interface ZodiacSign {
   id: string;
   name: string;
@@ -42,4 +43,10 @@ export enum LoadingState {
   LOADING = 'LOADING',
   SUCCESS = 'SUCCESS',
   ERROR = 'ERROR'
+}
+
+export interface GithubConfig {
+  owner: string;
+  repo: string;
+  token: string;
 }

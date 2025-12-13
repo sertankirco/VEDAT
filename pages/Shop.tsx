@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useContent } from '../context/ContentContext';
 import { ShoppingBag, ExternalLink } from 'lucide-react';
@@ -21,31 +22,34 @@ const Shop: React.FC = () => {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map((product) => (
-              <div key={product.id} className="bg-slate-900 border border-white/10 rounded-xl overflow-hidden hover:border-mystic-gold/30 transition-all hover:shadow-xl hover:-translate-y-1 group flex flex-col">
-                <div className="h-64 overflow-hidden relative shrink-0">
+              <div key={product.id} className="bg-slate-900 border border-white/10 rounded-xl overflow-hidden hover:border-mystic-gold/30 transition-all hover:shadow-xl hover:-translate-y-1 group flex flex-col h-full">
+                <div className="h-72 overflow-hidden relative shrink-0 bg-black/50">
                   <img 
                     src={product.imageUrl} 
                     alt={product.title} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute top-4 right-4 bg-mystic-dark/90 text-mystic-gold font-bold px-3 py-1 rounded-full border border-mystic-gold/20">
-                    {product.price}
-                  </div>
+                  {product.price && (
+                    <div className="absolute top-4 right-4 bg-mystic-dark/95 text-mystic-gold font-bold px-4 py-2 rounded-full border border-mystic-gold/20 shadow-lg backdrop-blur-sm">
+                      {product.price}
+                    </div>
+                  )}
                 </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <h2 className="text-xl font-serif text-white mb-3 min-h-[3.5rem]">{product.title}</h2>
-                  <p className="text-gray-400 text-sm mb-6 flex-grow whitespace-pre-line">
+                <div className="p-6 flex flex-col flex-grow relative z-10 bg-slate-900">
+                  <h2 className="text-2xl font-serif text-white mb-3 leading-tight">{product.title}</h2>
+                  <div className="h-1 w-12 bg-mystic-gold/30 mb-4 rounded-full"></div>
+                  <p className="text-gray-400 text-sm mb-6 flex-grow whitespace-pre-line leading-relaxed">
                     {product.description}
                   </p>
                   <a 
                     href={product.buyLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 bg-mystic-gold hover:bg-amber-500 text-mystic-dark font-bold py-3 px-4 rounded-lg transition-colors mt-auto"
+                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-mystic-gold to-amber-600 hover:from-amber-500 hover:to-amber-700 text-white font-bold py-4 px-4 rounded-lg transition-all transform hover:scale-[1.02] shadow-lg shadow-mystic-gold/10 mt-auto"
                   >
-                    <ShoppingBag className="h-4 w-4" />
+                    <ShoppingBag className="h-5 w-5" />
                     {product.buyButtonText || 'Αγορά / Κράτηση'}
-                    <ExternalLink className="h-4 w-4 opacity-70" />
+                    <ExternalLink className="h-4 w-4 opacity-70 ml-1" />
                   </a>
                 </div>
               </div>
