@@ -29,14 +29,12 @@ const Shop: React.FC = () => {
                     alt={product.title} 
                     className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   />
-                  {product.price && (
-                    <div className="absolute top-4 right-4 bg-mystic-dark/95 text-mystic-gold font-bold px-4 py-2 rounded-full border border-mystic-gold/20 shadow-lg backdrop-blur-sm">
-                      {product.price}
-                    </div>
-                  )}
                 </div>
                 <div className="p-6 flex flex-col flex-grow relative z-10 bg-slate-900">
-                  <h2 className="text-2xl font-serif text-white mb-3 leading-tight">{product.title}</h2>
+                  <div className="mb-3">
+                     <h2 className="text-2xl font-serif text-white leading-tight">{product.title}</h2>
+                  </div>
+                  
                   <div className="h-1 w-12 bg-mystic-gold/30 mb-4 rounded-full"></div>
                   <p className="text-gray-400 text-sm mb-6 flex-grow whitespace-pre-line leading-relaxed">
                     {product.description}
@@ -45,7 +43,7 @@ const Shop: React.FC = () => {
                     href={product.buyLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-mystic-gold to-amber-600 hover:from-amber-500 hover:to-amber-700 text-white font-bold py-4 px-4 rounded-lg transition-all transform hover:scale-[1.02] shadow-lg shadow-mystic-gold/10 mt-auto"
+                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-mystic-gold to-teal-600 hover:from-emerald-500 hover:to-teal-700 text-white font-bold py-4 px-4 rounded-lg transition-all transform hover:scale-[1.02] shadow-lg shadow-mystic-gold/10 mt-auto"
                   >
                     <ShoppingBag className="h-5 w-5" />
                     {product.buyButtonText || 'Αγορά / Κράτηση'}

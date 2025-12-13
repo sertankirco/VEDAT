@@ -1,5 +1,5 @@
 
-import { BlogPost, Product, Video, SiteImages, GithubConfig } from '../types';
+import { BlogPost, Product, Video, SiteImages, SocialLinks, GithubConfig } from '../types';
 
 const ZODIAC_STATIC_DATA = `[
   { id: 'aries', name: 'Κριός', dates: '21 Μαρ - 19 Απρ', icon: '♈' },
@@ -20,9 +20,10 @@ export const generateFileContent = (
   posts: BlogPost[],
   products: Product[],
   videos: Video[],
-  images: SiteImages
+  images: SiteImages,
+  socialLinks: SocialLinks
 ): string => {
-  return `import { ZodiacSign, BlogPost, Product, Video, SiteImages } from './types';
+  return `import { ZodiacSign, BlogPost, Product, Video, SiteImages, SocialLinks } from './types';
 
 export const ZODIAC_SIGNS: ZodiacSign[] = ${ZODIAC_STATIC_DATA};
 
@@ -33,6 +34,8 @@ export const INITIAL_PRODUCTS: Product[] = ${JSON.stringify(products, null, 2)};
 export const INITIAL_VIDEOS: Video[] = ${JSON.stringify(videos, null, 2)};
 
 export const INITIAL_SITE_IMAGES: SiteImages = ${JSON.stringify(images, null, 2)};
+
+export const INITIAL_SOCIAL_LINKS: SocialLinks = ${JSON.stringify(socialLinks, null, 2)};
 `;
 };
 

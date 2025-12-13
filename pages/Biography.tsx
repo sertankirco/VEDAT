@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useContent } from '../context/ContentContext';
 
@@ -12,7 +13,7 @@ const Biography: React.FC = () => {
           <p className="text-xl text-mystic-gold italic font-serif">"Ο Αστρολόγος που ενώνει πολιτισμούς μέσα από τα άστρα"</p>
         </div>
 
-        <div className="bg-slate-900 border border-white/10 rounded-2xl overflow-hidden shadow-2xl mb-12">
+        <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden shadow-2xl mb-12">
            <img 
             src={siteImages.bioMain} 
             alt="Vedat Delek On Stage" 

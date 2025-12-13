@@ -1,5 +1,5 @@
 
-import { ZodiacSign, BlogPost, Product, Video, SiteImages } from './types';
+import { ZodiacSign, BlogPost, Product, Video, SiteImages, SocialLinks } from './types';
 
 export const ZODIAC_SIGNS: ZodiacSign[] = [
   { id: 'aries', name: 'Κριός', dates: '21 Μαρ - 19 Απρ', icon: '♈' },
@@ -121,4 +121,11 @@ export const INITIAL_SITE_IMAGES: SiteImages = {
   homeProfile: "https://yt3.googleusercontent.com/s8AFfP7rGEfe6Owe27z23wClVzhM3qIPGTMt9IiqLK6fxf5HmJ2148Orugm6aj8f8dehFuURMAk=s900-c-k-c0x00ffffff-no-rj",
   bioMain: "https://pbs.twimg.com/profile_images/1940808265455030272/NUnGsk4P_400x400.jpg",
   footerVideo: "https://cdn.coverr.co/videos/coverr-flowers-in-the-wind-4509/1080p.mp4"
+};
+
+export const INITIAL_SOCIAL_LINKS: SocialLinks = {
+  instagram: "https://www.instagram.com/astrologvedatdelek/#/",
+  facebook: "https://www.facebook.com/astrologvedatdelek",
+  twitter: "https://x.com/ast_vedatdelek",
+  email: "info@vedatdelek.gr"
 };

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, Sun } from 'lucide-react';
@@ -10,6 +11,7 @@ const Home: React.FC = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
+        {/* Changed gradient to Blue/Dark */}
         <div className="absolute inset-0 bg-gradient-to-b from-mystic-purple/20 to-mystic-dark z-10" />
         <div 
           className="absolute inset-0 bg-cover bg-center z-0 opacity-40 transition-all duration-1000"
@@ -23,7 +25,7 @@ const Home: React.FC = () => {
             </span>
           </div>
           <h1 className="text-5xl md:text-7xl font-serif font-bold text-white mb-6 leading-tight">
-            Ανακαλύψτε το <span className="text-transparent bg-clip-text bg-gradient-to-r from-mystic-gold to-amber-200">Πεπρωμένο</span> σας
+            Ανακαλύψτε το <span className="text-transparent bg-clip-text bg-gradient-to-r from-mystic-gold to-cyan-300">Πεπρωμένο</span> σας
           </h1>
           <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto font-light">
             Ο Βεντάτ Ντελέκ αποκαλύπτει τα μυστικά των άστρων. Ετοιμαστείτε για ένα ταξίδι αυτογνωσίας και προβλέψεων.
@@ -31,7 +33,7 @@ const Home: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
               to="/horoscope" 
-              className="px-8 py-4 bg-mystic-gold hover:bg-amber-500 text-mystic-dark font-bold rounded-lg transition-all transform hover:scale-105 flex items-center justify-center gap-2"
+              className="px-8 py-4 bg-mystic-gold hover:bg-emerald-500 text-mystic-dark font-bold rounded-lg transition-all transform hover:scale-105 flex items-center justify-center gap-2"
             >
               <Sun className="h-5 w-5" />
               Ημερήσια Πρόβλεψη

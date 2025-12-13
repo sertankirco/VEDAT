@@ -1,12 +1,14 @@
+
 import React, { createContext, useContext, useState } from 'react';
-import { BlogPost, Product, Video, SiteImages } from '../types';
-import { INITIAL_POSTS, INITIAL_PRODUCTS, INITIAL_VIDEOS, INITIAL_SITE_IMAGES } from '../constants';
+import { BlogPost, Product, Video, SiteImages, SocialLinks } from '../types';
+import { INITIAL_POSTS, INITIAL_PRODUCTS, INITIAL_VIDEOS, INITIAL_SITE_IMAGES, INITIAL_SOCIAL_LINKS } from '../constants';
 
 interface ContentContextType {
   products: Product[];
   posts: BlogPost[];
   videos: Video[];
   siteImages: SiteImages;
+  socialLinks: SocialLinks;
   addProduct: (product: Omit<Product, 'id'>) => void;
   updateProduct: (id: number, product: Partial<Product>) => void;
   deleteProduct: (id: number) => void;
@@ -16,6 +18,7 @@ interface ContentContextType {
   addVideo: (video: Omit<Video, 'id'>) => void;
   deleteVideo: (id: number) => void;
   updateSiteImages: (images: Partial<SiteImages>) => void;
+  updateSocialLinks: (links: Partial<SocialLinks>) => void;
 }
 
 const ContentContext = createContext<ContentContextType | undefined>(undefined);
@@ -26,6 +29,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [posts, setPosts] = useState<BlogPost[]>(INITIAL_POSTS);
   const [videos, setVideos] = useState<Video[]>(INITIAL_VIDEOS);
   const [siteImages, setSiteImages] = useState<SiteImages>(INITIAL_SITE_IMAGES);
+  const [socialLinks, setSocialLinks] = useState<SocialLinks>(INITIAL_SOCIAL_LINKS);
 
   // Products
   const addProduct = (product: Omit<Product, 'id'>) => {
@@ -70,13 +74,18 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setSiteImages({ ...siteImages, ...images });
   };
 
+  // Social Links
+  const updateSocialLinks = (links: Partial<SocialLinks>) => {
+    setSocialLinks({ ...socialLinks, ...links });
+  };
+
   return (
     <ContentContext.Provider value={{ 
-      products, posts, videos, siteImages,
+      products, posts, videos, siteImages, socialLinks,
       addProduct, updateProduct, deleteProduct,
       addPost, updatePost, deletePost,
       addVideo, deleteVideo,
-      updateSiteImages
+      updateSiteImages, updateSocialLinks
     }}>
       {children}
     </ContentContext.Provider>

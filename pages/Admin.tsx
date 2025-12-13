@@ -1,17 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { useContent } from '../context/ContentContext';
-import { Trash2, Plus, Edit, Save, X, Lock, Video as VideoIcon, Settings, Image as ImageIcon, Github, UploadCloud } from 'lucide-react';
-import { Product, BlogPost, Video, SiteImages, GithubConfig } from '../types';
+import { Trash2, Plus, Edit, Save, X, Lock, Video as VideoIcon, Settings, Image as ImageIcon, Github, UploadCloud, Copy, Check, Share2 } from 'lucide-react';
+import { Product, BlogPost, Video, SiteImages, GithubConfig, SocialLinks } from '../types';
 import { generateFileContent, updateGithubFile } from '../services/githubService';
 
 const Admin: React.FC = () => {
   const { 
-    products, posts, videos, siteImages,
+    products, posts, videos, siteImages, socialLinks,
     addProduct, deleteProduct, updateProduct, 
     addPost, deletePost, updatePost,
     addVideo, deleteVideo,
-    updateSiteImages
+    updateSiteImages, updateSocialLinks
   } = useContent();
   
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -27,6 +27,7 @@ const Admin: React.FC = () => {
   const [postForm, setPostForm] = useState<Partial<BlogPost>>({});
   const [videoForm, setVideoForm] = useState<Partial<Video>>({});
   const [imagesForm, setImagesForm] = useState<SiteImages>(siteImages);
+  const [socialForm, setSocialForm] = useState<SocialLinks>(socialLinks);
 
   // Github State
   const [githubConfig, setGithubConfig] = useState<GithubConfig>({
@@ -35,6 +36,7 @@ const Admin: React.FC = () => {
     token: ''
   });
   const [isPublishing, setIsPublishing] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
 
   // Load GitHub config from local storage on mount
   useEffect(() => {
@@ -55,7 +57,7 @@ const Admin: React.FC = () => {
 
   const handlePublishToGithub = async () => {
     if (!githubConfig.owner || !githubConfig.repo || !githubConfig.token) {
-      alert('Παρακαλώ συμπληρώστε τις ρυθμίσεις GitHub στο tab "Ρυθμίσεις" πρώτα.');
+      alert('Για αυτόματη δημοσίευση, συμπληρώστε τις ρυθμίσεις GitHub στο tab "Ρυθμίσεις".\n\nΕναλλακτικά, χρησιμοποιήστε το κουμπί "Αντιγραφή" και στείλτε τον κώδικα στον προγραμματιστή.');
       setActiveTab('settings');
       return;
     }
@@ -66,13 +68,25 @@ const Admin: React.FC = () => {
 
     setIsPublishing(true);
     try {
-      const content = generateFileContent(posts, products, videos, siteImages);
+      const content = generateFileContent(posts, products, videos, siteImages, socialLinks);
       await updateGithubFile(githubConfig, content);
       alert('Επιτυχία! Οι αλλαγές αποθηκεύτηκαν στο GitHub. Το site θα ενημερωθεί σε λίγα λεπτά.');
     } catch (error: any) {
       alert('Σφάλμα: ' + error.message);
     } finally {
       setIsPublishing(false);
+    }
+  };
+
+  const handleCopyData = async () => {
+    try {
+      const content = generateFileContent(posts, products, videos, siteImages, socialLinks);
+      await navigator.clipboard.writeText(content);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 3000);
+      alert('Τα δεδομένα αντιγράφηκαν! Τώρα μπορείτε να τα στείλετε στον προγραμματιστή (ή στο Chat AI) για να ενημερώσει το αρχείο "constants.ts".');
+    } catch (err) {
+      alert('Αποτυχία αντιγραφής.');
     }
   };
 
@@ -104,7 +118,7 @@ const Admin: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-mystic-gold hover:bg-amber-500 text-mystic-dark font-bold py-3 rounded-lg transition-colors"
+              className="w-full bg-mystic-gold hover:bg-emerald-500 text-mystic-dark font-bold py-3 rounded-lg transition-colors"
             >
               Είσοδος
             </button>
@@ -176,7 +190,8 @@ const Admin: React.FC = () => {
 
   const handleSaveImages = () => {
     updateSiteImages(imagesForm);
-    alert('Οι εικόνες του site ενημερώθηκαν επιτυχώς! Μην ξεχάσετε να πατήσετε "Δημοσίευση στο Site" για μόνιμη αποθήκευση.');
+    updateSocialLinks(socialForm);
+    alert('Οι ρυθμίσεις (Εικόνες & Social) ενημερώθηκαν! Μην ξεχάσετε να πατήσετε "Αποθήκευση/Αντιγραφή" επάνω δεξιά για μόνιμη αποθήκευση.');
   };
 
   return (
@@ -185,20 +200,33 @@ const Admin: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
           <h1 className="text-3xl font-serif text-white">Πίνακας Ελέγχου</h1>
           
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3">
+             <button 
+              onClick={handleCopyData}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition-colors border border-mystic-gold/50 ${
+                copySuccess 
+                  ? 'bg-green-600 text-white' 
+                  : 'bg-transparent text-mystic-gold hover:bg-mystic-gold/10'
+              }`}
+              title="Αντιγραφή κώδικα για χειροκίνητη ενημέρωση"
+            >
+              {copySuccess ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+              {copySuccess ? 'Αντιγράφηκε!' : 'Αντιγραφή Δεδομένων'}
+            </button>
+
             <button 
               onClick={handlePublishToGithub}
               disabled={isPublishing}
               className={`flex items-center gap-2 px-6 py-2 rounded-lg font-bold transition-colors shadow-lg shadow-mystic-gold/10 ${
                 isPublishing 
                   ? 'bg-gray-600 cursor-not-allowed text-gray-300' 
-                  : 'bg-gradient-to-r from-mystic-gold to-amber-600 hover:from-amber-500 hover:to-amber-700 text-white'
+                  : 'bg-gradient-to-r from-mystic-gold to-teal-600 hover:from-emerald-500 hover:to-teal-700 text-white'
               }`}
             >
               <UploadCloud className={`h-5 w-5 ${isPublishing ? 'animate-bounce' : ''}`} />
               {isPublishing ? 'Δημοσίευση...' : 'Δημοσίευση στο Site'}
             </button>
-            <button onClick={() => setIsAuthenticated(false)} className="text-gray-400 hover:text-white text-sm">Έξοδος</button>
+            <button onClick={() => setIsAuthenticated(false)} className="text-gray-400 hover:text-white text-sm ml-2">Έξοδος</button>
           </div>
         </div>
 
@@ -229,7 +257,7 @@ const Admin: React.FC = () => {
             Βίντεο (Videos)
           </button>
           <button
-            onClick={() => { setActiveTab('settings'); setImagesForm(siteImages); }}
+            onClick={() => { setActiveTab('settings'); setImagesForm(siteImages); setSocialForm(socialLinks); }}
             className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-colors whitespace-nowrap flex items-center gap-2 ${
               activeTab === 'settings' ? 'bg-slate-800 text-mystic-gold border-t border-x border-white/10' : 'text-gray-400 hover:text-white'
             }`}
@@ -250,7 +278,7 @@ const Admin: React.FC = () => {
             {activeTab !== 'settings' && (
               <button
                 onClick={() => { setIsAdding(true); setEditingId(null); setProductForm({}); setPostForm({}); setVideoForm({}); }}
-                className="flex items-center gap-2 bg-mystic-gold text-mystic-dark px-4 py-2 rounded-lg font-bold hover:bg-amber-500 transition-colors"
+                className="flex items-center gap-2 bg-mystic-gold text-mystic-dark px-4 py-2 rounded-lg font-bold hover:bg-emerald-500 transition-colors"
               >
                 <Plus className="h-4 w-4" /> Προσθήκη
               </button>
@@ -269,9 +297,6 @@ const Admin: React.FC = () => {
                    <h3 className="text-lg font-serif text-white mb-4 flex items-center gap-2">
                      <Github className="h-5 w-5 text-mystic-gold" /> Σύνδεση GitHub (Για Αυτόματη Δημοσίευση)
                    </h3>
-                   <p className="text-sm text-gray-400 mb-4">
-                     Για να αποθηκεύονται οι αλλαγές μόνιμα και να ενημερώνεται το site αυτόματα, εισάγετε τα στοιχεία του GitHub Repository.
-                   </p>
                    <div className="grid md:grid-cols-3 gap-4 mb-4">
                       <div>
                         <label className="block text-gray-400 text-xs mb-1">GitHub Username (Owner)</label>
@@ -310,6 +335,52 @@ const Admin: React.FC = () => {
                    </button>
                 </div>
 
+                {/* Social Media Links */}
+                <div className="bg-black/20 p-6 rounded-lg border border-white/5">
+                   <h3 className="text-lg font-serif text-white mb-4 flex items-center gap-2">
+                     <Share2 className="h-5 w-5 text-mystic-gold" /> Κοινωνικά Δίκτυα (Social Media)
+                   </h3>
+                   <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-gray-400 text-sm mb-1">Instagram URL</label>
+                        <input 
+                           className="w-full bg-slate-800 border border-white/10 rounded p-2 text-white"
+                           value={socialForm.instagram}
+                           onChange={e => setSocialForm({...socialForm, instagram: e.target.value})}
+                           placeholder="https://instagram.com/..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 text-sm mb-1">Facebook URL</label>
+                        <input 
+                           className="w-full bg-slate-800 border border-white/10 rounded p-2 text-white"
+                           value={socialForm.facebook}
+                           onChange={e => setSocialForm({...socialForm, facebook: e.target.value})}
+                           placeholder="https://facebook.com/..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 text-sm mb-1">Twitter (X) URL</label>
+                        <input 
+                           className="w-full bg-slate-800 border border-white/10 rounded p-2 text-white"
+                           value={socialForm.twitter}
+                           onChange={e => setSocialForm({...socialForm, twitter: e.target.value})}
+                           placeholder="https://twitter.com/..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 text-sm mb-1">Email Επικοινωνίας</label>
+                        <input 
+                           className="w-full bg-slate-800 border border-white/10 rounded p-2 text-white"
+                           value={socialForm.email}
+                           onChange={e => setSocialForm({...socialForm, email: e.target.value})}
+                           placeholder="info@vedatdelek.gr"
+                        />
+                      </div>
+                   </div>
+                </div>
+
+                {/* Images */}
                 <div className="bg-black/20 p-6 rounded-lg border border-white/5">
                    <h3 className="text-lg font-serif text-white mb-4 flex items-center gap-2">
                      <ImageIcon className="h-5 w-5 text-mystic-gold" /> Εικόνες & Video Site
@@ -347,10 +418,9 @@ const Admin: React.FC = () => {
                            value={imagesForm.footerVideo || ''}
                            onChange={e => setImagesForm({...imagesForm, footerVideo: e.target.value})}
                       />
-                      <p className="text-xs text-gray-500">Video formatı MP4 olmalıdır. Doğrudan video dosyasına giden bir link kullanın.</p>
                    </div>
                 </div>
-
+                
                 <div className="bg-black/20 p-6 rounded-lg border border-white/5">
                    <h3 className="text-lg font-serif text-white mb-4 flex items-center gap-2">
                      <ImageIcon className="h-5 w-5 text-mystic-gold" /> Εικόνες Βιογραφίας
@@ -373,7 +443,7 @@ const Admin: React.FC = () => {
                       onClick={handleSaveImages}
                       className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition-colors flex items-center gap-2"
                    >
-                     <Save className="h-5 w-5" /> Αποθήκευση Εικόνων
+                     <Save className="h-5 w-5" /> Αποθήκευση Όλων (Εικόνες & Social)
                    </button>
                 </div>
              </div>

@@ -39,6 +39,13 @@ export interface SiteImages {
   footerVideo?: string;
 }
 
+export interface SocialLinks {
+  instagram: string;
+  facebook: string;
+  twitter: string;
+  email: string;
+}
+
 export enum LoadingState {
   IDLE = 'IDLE',
   LOADING = 'LOADING',
