@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useContent } from '../context/ContentContext';
 import { PlayCircle, Calendar, AlertCircle } from 'lucide-react';
@@ -26,15 +27,15 @@ const Videos: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-mystic-dark py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-serif text-white mb-4">Βίντεο & Συνεντεύξεις</h1>
-          <p className="text-gray-400">Παρακολουθήστε τις τελευταίες τηλεοπτικές εμφανίσεις και προβλέψεις.</p>
+          <h1 className="text-4xl md:text-5xl font-serif text-mystic-dark font-bold mb-4">Βίντεο & Συνεντεύξεις</h1>
+          <p className="text-slate-600 font-medium">Παρακολουθήστε τις τελευταίες τηλεοπτικές εμφανίσεις και προβλέψεις.</p>
         </div>
 
         {videos.length === 0 ? (
-          <div className="text-center text-gray-500 py-20">
+          <div className="text-center text-slate-400 py-20">
             <PlayCircle className="mx-auto h-16 w-16 mb-4 opacity-50" />
             <p>Δεν υπάρχουν βίντεο διαθέσιμα αυτή τη στιγμή.</p>
           </div>
@@ -44,7 +45,7 @@ const Videos: React.FC = () => {
               const embedUrl = getEmbedUrl(video.youtubeUrl);
               
               return (
-                <div key={video.id} className="bg-slate-900 border border-white/10 rounded-xl overflow-hidden shadow-lg hover:shadow-mystic-gold/10 transition-all group">
+                <div key={video.id} className="bg-white border border-blue-100 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all group">
                   <div className="relative pt-[56.25%] bg-black">
                     {embedUrl ? (
                       <iframe 
@@ -57,7 +58,7 @@ const Videos: React.FC = () => {
                         loading="lazy"
                       ></iframe>
                     ) : (
-                      <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 bg-gray-900">
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 bg-gray-200">
                         <AlertCircle className="h-10 w-10 mb-2 opacity-50" />
                         <span className="text-sm">Μη έγκυρος σύνδεσμος βίντεο</span>
                         <span className="text-xs text-gray-600 mt-1 truncate max-w-[80%] px-4">{video.youtubeUrl}</span>
@@ -65,11 +66,11 @@ const Videos: React.FC = () => {
                     )}
                   </div>
                   <div className="p-6">
-                    <div className="flex items-center text-xs text-gray-500 mb-2">
+                    <div className="flex items-center text-xs text-blue-500 font-bold mb-2">
                       <Calendar className="h-3 w-3 mr-1" />
                       {video.date}
                     </div>
-                    <h3 className="text-xl font-serif text-white group-hover:text-mystic-gold transition-colors">{video.title}</h3>
+                    <h3 className="text-xl font-serif text-mystic-dark font-bold group-hover:text-blue-700 transition-colors">{video.title}</h3>
                   </div>
                 </div>
               );

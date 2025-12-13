@@ -17,10 +17,11 @@
               sans: ['Lato', 'sans-serif'],
             },
             colors: {
-              // YENİ RENK PALETİ: GRİ, PASTEL MAVİ, YEŞİL
-              'mystic-dark': '#1e293b',   // Ana Arka Plan (Slate 800 - Koyu Gri/Mavi)
-              'mystic-gold': '#34d399',   // Vurgular (Emerald 400 - Pastel Yeşil)
-              'mystic-purple': '#60a5fa', // Detaylar (Blue 400 - Pastel Mavi)
+              // YENİ TEMA: BEYAZ ARKA PLAN, MAVİ YAZILAR
+              'mystic-dark': '#0f2b5c',   // Koyu Mavi (Yazılar ve Footer için)
+              'mystic-gold': '#b45309',   // Koyu Altın/Turuncu (Vurgular için)
+              'mystic-light': '#f0f9ff',  // Çok açık mavi (Bölüm arka planları için)
+              'mystic-blue': '#3b82f6',   // Parlak Mavi
             }
           }
         }
@@ -41,7 +42,7 @@
 }
 </script>
 </head>
-  <body class="bg-mystic-dark text-slate-200 antialiased selection:bg-mystic-gold selection:text-mystic-dark">
+  <body class="bg-white text-mystic-dark antialiased selection:bg-mystic-dark selection:text-white">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>
