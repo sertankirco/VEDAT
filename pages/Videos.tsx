@@ -6,7 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 const Videos: React.FC = () => {
   const { videos } = useContent();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const getEmbedUrl = (url: string) => {
     if (!url) return null;
@@ -44,6 +44,7 @@ const Videos: React.FC = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
             {videos.map((video) => {
               const embedUrl = getEmbedUrl(video.youtubeUrl);
+              const title = (language === 'en' && video.titleEn) ? video.titleEn : video.title;
               
               return (
                 <div key={video.id} className="bg-white border border-blue-100 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all group">
@@ -52,7 +53,7 @@ const Videos: React.FC = () => {
                       <iframe 
                         className="absolute inset-0 w-full h-full"
                         src={embedUrl} 
-                        title={video.title}
+                        title={title}
                         frameBorder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                         allowFullScreen
@@ -71,7 +72,7 @@ const Videos: React.FC = () => {
                       <Calendar className="h-3 w-3 mr-1" />
                       {video.date}
                     </div>
-                    <h3 className="text-xl font-serif text-mystic-dark font-bold group-hover:text-blue-700 transition-colors">{video.title}</h3>
+                    <h3 className="text-xl font-serif text-mystic-dark font-bold group-hover:text-blue-700 transition-colors">{title}</h3>
                   </div>
                 </div>
               );

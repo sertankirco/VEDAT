@@ -12,8 +12,11 @@ export interface ZodiacSign {
 export interface BlogPost {
   id: number;
   title: string;
+  titleEn?: string; // Added English Title
   excerpt: string;
+  excerptEn?: string; // Added English Excerpt
   content?: string;
+  contentEn?: string; // Added English Content
   date: string;
   imageUrl: string;
 }
@@ -21,16 +24,20 @@ export interface BlogPost {
 export interface Product {
   id: number;
   title: string;
+  titleEn?: string; // Added English Title
   description: string;
+  descriptionEn?: string; // Added English Description
   price: string;
   imageUrl: string;
   buyLink: string;
   buyButtonText?: string;
+  buyButtonTextEn?: string; // Added English Button Text
 }
 
 export interface Video {
   id: number;
   title: string;
+  titleEn?: string; // Added English Title
   youtubeUrl: string;
   date: string;
 }
