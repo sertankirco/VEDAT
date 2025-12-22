@@ -19,106 +19,94 @@ export const ZODIAC_SIGNS: ZodiacSign[] = [
 export const INITIAL_POSTS: BlogPost[] = [
   {
     id: 1,
-    title: "Ετήσιες Προβλέψεις 2024: Έτος Καρμικής Δικαιοσύνης",
-    titleEn: "Annual Predictions 2024: Year of Karmic Justice",
-    excerpt: "Το 2024 είναι μια χρονιά σταθμός. Ο Βεντάτ Ντελέκ αναλύει τις μεγάλες πλανητικές μετακινήσεις και πώς ο Κρόνος θα αποδώσει δικαιοσύνη.",
-    excerptEn: "2024 is a milestone year. Vedat Delek analyzes major planetary movements and how Saturn will deliver justice.",
-    content: `Το 2024 αστρολογικά θεωρείται έτος "8" (2+0+2+4). Στην αριθμολογία, το 8 συμβολίζει τη δύναμη, την αφθονία αλλά και την καρμική ισορροπία. 
-
-Για πολλά ζώδια, αυτή η χρονιά θα φέρει την ανταμοιβή των κόπων τους, ενώ για άλλα θα φέρει αναγκαίες εκκαθαρίσεις. Η παρουσία του Πλούτωνα στον Υδροχόο αλλάζει τα δεδομένα στην τεχνολογία και την κοινωνία.
-
-**Κριός:** Μια χρονιά δράσης και πρωτοβουλιών.
-**Ταύρος:** Ο Δίας στο ζώδιό σας μέχρι τον Μάιο φέρνει τύχη.
-**Δίδυμοι:** Από τον Μάιο και μετά, η τύχη σας χαμογελά.`,
-    contentEn: `Astrologically, 2024 is considered an "8" year (2+0+2+4). In numerology, 8 symbolizes power, abundance, but also karmic balance.
-
-For many signs, this year will bring the reward of their efforts, while for others it will bring necessary purges. The presence of Pluto in Aquarius changes the data in technology and society.
-
-**Aries:** A year of action and initiatives.
-**Taurus:** Jupiter in your sign until May brings luck.
-**Gemini:** From May onwards, luck smiles upon you.`,
-    date: "01 Ιαν 2024",
-    imageUrl: "https://picsum.photos/seed/astro2024/800/600"
-  },
-  {
-    id: 2,
-    title: "Η Νέα Σελήνη στους Ιχθύες: Θεραπεία και Όνειρα",
-    titleEn: "New Moon in Pisces: Healing and Dreams",
-    excerpt: "Η Νέα Σελήνη στους Ιχθύες μας καλεί να συνδεθούμε με το υποσυνείδητό μας και να κάνουμε μια νέα αρχή μέσω της συγχώρεσης.",
-    excerptEn: "The New Moon in Pisces invites us to connect with our subconscious and make a fresh start through forgiveness.",
-    content: `Η ενέργεια των Ιχθύων είναι βαθιά συναισθηματική και πνευματική. Αυτή η Νέα Σελήνη είναι η ιδανική ευκαιρία για να:
-
-1. Ασχοληθείτε με το διαλογισμό και την προσευχή.
-2. Ζητήσετε συγγνώμη ή να συγχωρέσετε ανθρώπους που σας πλήγωσαν.
-3. Οραματιστείτε το μέλλον σας χωρίς φόβο.`,
-    contentEn: `Pisces energy is deeply emotional and spiritual. This New Moon is the perfect opportunity to:
-
-1. Engage in meditation and prayer.
-2. Apologize or forgive people who have hurt you.
-3. Visualize your future without fear.`,
-    date: "10 Μαρ 2024",
-    imageUrl: "https://picsum.photos/seed/moonpisces/800/600"
-  },
-  {
-    id: 3,
-    title: "Ο Πλούτωνας στον Υδροχόο: Η Νέα Εποχή",
-    titleEn: "Pluto in Aquarius: The New Era",
-    excerpt: "Μια ιστορική αστρολογική μετακίνηση που θα αλλάξει τον κόσμο για τα επόμενα 20 χρόνια. Τι σημαίνει για την ελευθερία και την τεχνολογία.",
-    excerptEn: "A historic astrological shift that will change the world for the next 20 years. What it means for freedom and technology.",
-    content: `Ο Πλούτωνας είναι ο πλανήτης του θανάτου και της αναγέννησης. Η είσοδός του στον Υδροχόο σηματοδοτεί το τέλος παλιών δομών εξουσίας.`,
-    contentEn: `Pluto is the planet of death and rebirth. Its entry into Aquarius marks the end of old power structures.`,
-    date: "21 Ιαν 2024",
-    imageUrl: "https://picsum.photos/seed/pluto/800/600"
-  },
-  {
-    id: 4,
-    title: "Ερμής στον Κριό: Λόγια που καίνε",
-    titleEn: "Mercury in Aries: Burning Words",
-    excerpt: "Ο Ερμής περνάει στο ζώδιο του Κριού και η επικοινωνία γίνεται γρήγορη, άμεση αλλά και επιθετική. Πώς να αποφύγετε τις παρεξηγήσεις.",
-    excerptEn: "Mercury moves into Aries and communication becomes fast, direct but also aggressive. How to avoid misunderstandings.",
-    content: `Με τον Ερμή στον Κριό, η σκέψη μας τρέχει με χίλια. Είναι εξαιρετική περίοδος για να πάρετε γρήγορες αποφάσεις.`,
-    contentEn: `With Mercury in Aries, our thoughts race. It is an excellent time to make quick decisions.`,
-    date: "15 Μαρ 2024",
-    imageUrl: "https://picsum.photos/seed/mercury/800/600"
+    title: "Το Μεγάλο Ταξίδι του 2025: Τι μας Επιφυλάσσουν τα Άστρα",
+    excerpt: "Μια βαθιά ανάλυση των πλανητικών κινήσεων για το επόμενο έτος. Πώς ο Πλούτωνας στον Υδροχόο αλλάζει την κοινωνία μας.",
+    content: `Το 2025 είναι η χρονιά της μεγάλης μετάβασης. Ο Πλούτωνας εγκαθίσταται οριστικά στον Υδροχόο, φέροντας ριζικές αλλαγές στην τεχνολογία, την ελευθερία και τον τρόπο που επικοινωνούμε.`,
+    date: "15 Φεβ 2024",
+    imageUrl: "https://images.unsplash.com/photo-1532968961962-8a0cb3a2d4f5?q=80&w=800&auto=format&fit=crop"
   }
 ];
 
 export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 1,
-    title: "Προσωπικός Αστρολογικός Χάρτης",
-    titleEn: "Personal Birth Chart Reading",
-    description: "Αναλυτική συνεδρία για τον γενέθλιο χάρτη σας. Μάθετε τι προβλέπουν τα άστρα για την καριέρα, τα οικονομικά και τα αισθηματικά σας.",
-    descriptionEn: "Detailed session for your natal chart. Learn what the stars predict for your career, finances, and love life.",
+    title: "Ανάλυση Γενέθλιου Χάρτη (Birth Chart)",
+    description: "Η απόλυτη ανάλυση του πεπρωμένου σας. Μάθετε τις δυνατότητες, τις προκλήσεις και τον σκοπό της ζωής σας.",
     price: "150€",
-    imageUrl: "https://i.etsystatic.com/62718937/r/il/57c8c4/7530939179/il_1588xN.7530939179_8g9w.jpg",
-    buyLink: "https://www.etsy.com/listing/4419539660/my-financial-situation-money-flow-tarot?sr_prefetch=1&pf_from=shop_home&ref=shop_home_active_8&dd=1&logging_key=57f534ac86d2b609f69ed8c94578af3200cd8920%3A4419539660", 
-    buyButtonText: "Κλείστε Ραντεβού",
-    buyButtonTextEn: "Book Appointment"
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/57c8c4/7530939179/il_794xN.7530939179_8g9w.jpg",
+    buyLink: "https://www.etsy.com/listing/4419539660"
   },
   {
     id: 2,
-    title: "Βιβλίο: Το Κάρμα της Αγάπης",
-    titleEn: "Book: The Karma of Love",
-    description: "Το νέο βιβλίο του Vedat Delek. Ένας οδηγός για να βρείτε την αδελφή ψυχή σας μέσα από την κατανόηση των καρμικών δεσμών.",
-    descriptionEn: "Vedat Delek's new book. A guide to finding your soulmate through understanding karmic ties.",
-    price: "22€",
-    imageUrl: "https://i.etsystatic.com/62718937/r/il/57c8c4/7530939179/il_1588xN.7530939179_8g9w.jpg",
-    buyLink: "https://www.etsy.com/listing/4419537846/will-heshe-contact-me-tarot-reading?sr_prefetch=1&pf_from=shop_home&ref=shop_home_active_7&dd=1&logging_key=50bec22faad70c350360dcaaff2f606d75c8fc2d%3A4419537846", 
-    buyButtonText: "Αγορά Βιβλίου",
-    buyButtonTextEn: "Buy Book"
+    title: "Ανάλυση Συναστρίας & Σχέσεων",
+    description: "Κατανοήστε τη σχέση σας σε βάθος. Συμβατότητα και καρμικοί δεσμοί μεταξύ δύο ανθρώπων.",
+    price: "180€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/64860d/7530938741/il_794xN.7530938741_e8sh.jpg",
+    buyLink: "https://www.etsy.com/listing/4419541894"
   },
   {
     id: 3,
-    title: "Ετήσια Πρόβλεψη 2025 (PDF)",
-    titleEn: "Annual Prediction 2025 (PDF)",
-    description: "Γραπτή ανάλυση 20 σελίδων ειδικά για το ζώδιο και τον ωροσκόπο σας. Αποστέλλεται στο email σας.",
-    descriptionEn: "Written 20-page analysis specifically for your sign and ascendant. Sent to your email.",
-    price: "60€",
-    imageUrl: "https://i.etsystatic.com/62718937/r/il/57c8c4/7530939179/il_1588xN.7530939179_8g9w.jpg",
-    buyLink: "#", 
-    buyButtonText: "Παραγγελία",
-    buyButtonTextEn: "Order Now"
+    title: "Καρμική Αστρολογική Ανάλυση",
+    description: "Ανακαλύψτε τα καρμικά χρέη και τα μαθήματα που κουβαλάει η ψυχή σας από προηγούμενες ζωές.",
+    price: "160€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/c81062/7530938637/il_794xN.7530938637_25at.jpg",
+    buyLink: "https://www.etsy.com/listing/4419532735"
+  },
+  {
+    id: 4,
+    title: "Ετήσια Πρόβλεψη (Solar Return)",
+    description: "Ο οδηγός σας για την επόμενη χρονιά. Μάθετε τι θα συμβεί από τα γενέθλιά σας μέχρι τα επόμενα.",
+    price: "120€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/15f212/7530938885/il_794xN.7530938885_fsw5.jpg",
+    buyLink: "https://www.etsy.com/listing/4419530804"
+  },
+  {
+    id: 5,
+    title: "Επαγγελματικός Προσανατολισμός",
+    description: "Βρείτε το ιδανικό επάγγελμα και το δρόμο προς την οικονομική επιτυχία μέσω του χάρτη σας.",
+    price: "140€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/697956/7530939023/il_794xN.7530939023_nt2q.jpg",
+    buyLink: "https://www.etsy.com/shop/AstrologVedatDelekEU"
+  },
+  {
+    id: 6,
+    title: "Ωριαία Αστρολογία (Συγκεκριμένη Ερώτηση)",
+    description: "Έχετε μια κρίσιμη ερώτηση; Λάβετε μια ξεκάθαρη απάντηση 'Ναι' ή 'Όχι' με αστρολογική τεκμηρίωση.",
+    price: "90€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/057106/7530938927/il_794xN.7530938927_101l.jpg",
+    buyLink: "https://www.etsy.com/shop/AstrologVedatDelekEU"
+  },
+  {
+    id: 7,
+    title: "Επιλογή Τυχερής Ημερομηνίας (Electional)",
+    description: "Βρείτε την καταλληλότερη στιγμή για γάμο, έναρξη επιχείρησης ή σημαντικές υπογραφές.",
+    price: "100€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/5092a0/7530939103/il_794xN.7530939103_6f7f.jpg",
+    buyLink: "https://www.etsy.com/shop/AstrologVedatDelekEU"
+  },
+  {
+    id: 8,
+    title: "Ανάλυση Διελεύσεων (6 Μήνες)",
+    description: "Πώς οι πλανήτες αυτή τη στιγμή επηρεάζουν τη ζωή σας. Λεπτομερής εξάμηνη πρόβλεψη.",
+    price: "130€",
+    imageUrl: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=800&auto=format&fit=crop",
+    buyLink: "https://www.etsy.com/shop/AstrologVedatDelekEU"
+  },
+  {
+    id: 9,
+    title: "Ιατρική Αστρολογία (Συμβουλευτική)",
+    description: "Εντοπίστε τις ευαισθησίες του οργανισμού σας και μάθετε πώς να ενισχύσετε την ευεξία σας αστρολογικά.",
+    price: "140€",
+    imageUrl: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=800&auto=format&fit=crop",
+    buyLink: "https://www.etsy.com/shop/AstrologVedatDelekEU"
+  },
+  {
+    id: 10,
+    title: "Βιβλίο: Το Κάρμα της Αγάπης",
+    description: "Ο οδηγός του Βεντάτ Ντελέκ για την κατανόηση των σχέσεων και την εύρεση της αληθινής αγάπης.",
+    price: "25€",
+    imageUrl: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop",
+    buyLink: "https://www.etsy.com/listing/4419537846"
   }
 ];
 
@@ -126,16 +114,8 @@ export const INITIAL_VIDEOS: Video[] = [
   {
     id: 1,
     title: "Προβλέψεις για την Τουρκία και την Ελλάδα",
-    titleEn: "Predictions for Turkey and Greece",
     youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 
     date: "10 Φεβ 2024"
-  },
-  {
-    id: 2,
-    title: "Συνέντευξη στο OPEN TV",
-    titleEn: "Interview on OPEN TV",
-    youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 
-    date: "05 Ιαν 2024"
   }
 ];
 

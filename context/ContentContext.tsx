@@ -9,6 +9,7 @@ interface ContentContextType {
   videos: Video[];
   siteImages: SiteImages;
   socialLinks: SocialLinks;
+  setProducts: (products: Product[]) => void;
   addProduct: (product: Omit<Product, 'id'>) => void;
   updateProduct: (id: number, product: Partial<Product>) => void;
   deleteProduct: (id: number) => void;
@@ -25,24 +26,28 @@ const ContentContext = createContext<ContentContextType | undefined>(undefined);
 
 export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Initialize with static data
-  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+  const [products, setProductsState] = useState<Product[]>(INITIAL_PRODUCTS);
   const [posts, setPosts] = useState<BlogPost[]>(INITIAL_POSTS);
   const [videos, setVideos] = useState<Video[]>(INITIAL_VIDEOS);
   const [siteImages, setSiteImages] = useState<SiteImages>(INITIAL_SITE_IMAGES);
   const [socialLinks, setSocialLinks] = useState<SocialLinks>(INITIAL_SOCIAL_LINKS);
 
   // Products
+  const setProducts = (newProducts: Product[]) => {
+    setProductsState(newProducts);
+  };
+
   const addProduct = (product: Omit<Product, 'id'>) => {
     const newProduct = { ...product, id: Date.now() };
-    setProducts([...products, newProduct]);
+    setProductsState([...products, newProduct]);
   };
 
   const updateProduct = (id: number, updatedFields: Partial<Product>) => {
-    setProducts(products.map(p => p.id === id ? { ...p, ...updatedFields } : p));
+    setProductsState(products.map(p => p.id === id ? { ...p, ...updatedFields } : p));
   };
 
   const deleteProduct = (id: number) => {
-    setProducts(products.filter(p => p.id !== id));
+    setProductsState(products.filter(p => p.id !== id));
   };
 
   // Posts
@@ -82,7 +87,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   return (
     <ContentContext.Provider value={{ 
       products, posts, videos, siteImages, socialLinks,
-      addProduct, updateProduct, deleteProduct,
+      setProducts, addProduct, updateProduct, deleteProduct,
       addPost, updatePost, deletePost,
       addVideo, deleteVideo,
       updateSiteImages, updateSocialLinks

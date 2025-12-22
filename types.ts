@@ -3,8 +3,8 @@ export type Language = 'el' | 'en';
 
 export interface ZodiacSign {
   id: string;
-  name: string;     // Greek Name
-  nameEn: string;   // English Name
+  name: string;
+  nameEn: string;
   dates: string;
   icon: string;
 }
@@ -12,11 +12,11 @@ export interface ZodiacSign {
 export interface BlogPost {
   id: number;
   title: string;
-  titleEn?: string; // Added English Title
+  titleEn?: string;
   excerpt: string;
-  excerptEn?: string; // Added English Excerpt
+  excerptEn?: string;
   content?: string;
-  contentEn?: string; // Added English Content
+  contentEn?: string;
   date: string;
   imageUrl: string;
 }
@@ -24,20 +24,16 @@ export interface BlogPost {
 export interface Product {
   id: number;
   title: string;
-  titleEn?: string; // Added English Title
   description: string;
-  descriptionEn?: string; // Added English Description
   price: string;
   imageUrl: string;
   buyLink: string;
-  buyButtonText?: string;
-  buyButtonTextEn?: string; // Added English Button Text
 }
 
 export interface Video {
   id: number;
   title: string;
-  titleEn?: string; // Added English Title
+  titleEn?: string;
   youtubeUrl: string;
   date: string;
 }
