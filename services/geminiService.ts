@@ -2,7 +2,7 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Language, Product } from "../types";
 
-// Initialize directly using process.env.API_KEY as per instructions
+// Always initialize with process.env.API_KEY as per guidelines
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
 export const generateHoroscope = async (sign: string, language: Language = 'el'): Promise<string> => {
@@ -20,13 +20,13 @@ export const generateHoroscope = async (sign: string, language: Language = 'el')
       contents: prompt,
     });
     
-    // Safety check for response.text to avoid TS18048
-    return response.text || (language === 'el' ? "Η πρόβλεψη δεν είναι διαθέσιμη." : "Prediction unavailable.");
+    // Safety check for response.text
+    return response.text ?? (language === 'el' ? "Η πρόβλεψη δεν είναι διαθέσιμη." : "Prediction unavailable.");
   } catch (error) {
     console.error("Gemini API Error (Horoscope):", error);
     return language === 'el' 
-      ? "Τα άστρα είναι θολά. Δοκιμάστε ξανά."
-      : "Stars are cloudy. Try again.";
+      ? "Τα άστρα είναι θολά αυτή τη στιγμή. Παρακαλώ προσπαθήστε ξανά σε λίγο."
+      : "The stars are cloudy right now. Please try again later.";
   }
 };
 
@@ -34,8 +34,9 @@ export const askAstrologer = async (question: string, language: Language = 'el')
   const prompt = `
     You are the astrologer Vedat Delek. Answer the following user question:
     "${question}"
+    
     The response language MUST be ${language === 'el' ? 'Greek (Ελληνικά)' : 'English'}.
-    Keep it short and wise.
+    Keep the answer short (up to 150 words), wise, and intuitive.
   `;
 
   try {
@@ -43,10 +44,12 @@ export const askAstrologer = async (question: string, language: Language = 'el')
       model: 'gemini-3-flash-preview',
       contents: prompt,
     });
-    return response.text || (language === 'el' ? "Δεν υπάρχει απάντηση." : "No answer.");
+    return response.text ?? (language === 'el' ? "Δεν υπάρχει απάντηση." : "No answer available.");
   } catch (error) {
     console.error("Gemini API Error (Ask):", error);
-    return language === 'el' ? "Πρόβλημα επικοινωνίας." : "Comm error.";
+    return language === 'el' 
+      ? "Συγγνώμη, υπήρξε ένα πρόβλημα στην επικοινωνία με τα άστρα." 
+      : "Sorry, there was a problem communicating with the stars.";
   }
 };
 
@@ -54,10 +57,10 @@ export const syncProductsFromStore = async (storeUrl: string): Promise<Omit<Prod
   if (!storeUrl) throw new Error("Store URL missing");
 
   const prompt = `
-    Find products at: ${storeUrl}. Return JSON array of objects with:
-    title (Greek), titleEn (English), description (Greek), descriptionEn (English), 
-    price (e.g. "20€"), imageUrl (direct), buyLink (direct).
-    Return ONLY the valid JSON array.
+    Find the products currently available at the store: ${storeUrl}.
+    Extract product information and return it as a JSON array.
+    Include title, titleEn, description, descriptionEn, price, imageUrl, and buyLink.
+    Return ONLY valid JSON.
   `;
 
   try {
@@ -87,10 +90,11 @@ export const syncProductsFromStore = async (storeUrl: string): Promise<Omit<Prod
     });
 
     const text = response.text;
-    const products: Omit<Product, 'id'>[] = JSON.parse(text || '[]');
+    const jsonStr = text ? text.trim() : '[]';
+    const products: Omit<Product, 'id'>[] = JSON.parse(jsonStr);
     return products;
   } catch (error) {
     console.error("Gemini Sync Error:", error);
-    throw new Error("Failed to sync products.");
+    throw new Error("Failed to sync products from store.");
   }
 };

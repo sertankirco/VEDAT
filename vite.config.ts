@@ -18,7 +18,6 @@ export default defineConfig(({ mode }) => {
       },
     },
     define: {
-      // Ensure API_KEY is stringified properly for the build replacement
       'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
     },
     server: {
