@@ -2,7 +2,7 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Language, Product } from "../types";
 
-// Always initialize with process.env.API_KEY as per the rules
+// Always initialize with process.env.API_KEY as a named parameter
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
 
 export const generateHoroscope = async (sign: string, language: Language = 'el'): Promise<string> => {
@@ -20,7 +20,7 @@ export const generateHoroscope = async (sign: string, language: Language = 'el')
       contents: prompt,
     });
     
-    // Correct way to get text according to guidelines
+    // Access .text property directly
     return response.text || (language === 'el' ? "Η πρόβλεψη δεν είναι διαθέσιμη." : "Prediction unavailable.");
   } catch (error) {
     console.error("Gemini API Error (Horoscope):", error);

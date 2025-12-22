@@ -2,10 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { useContent } from '../context/ContentContext';
 import { useLanguage } from '../context/LanguageContext';
-import { Trash2, Plus, Edit, Save, X, Lock, Settings, Image as ImageIcon, Github, UploadCloud, Copy, Check, Share2, RefreshCw, ShoppingCart, Video as VideoIcon } from 'lucide-react';
+import { Trash2, Plus, Edit, Save, Copy, Check, Github, Image as ImageIcon } from 'lucide-react';
 import { Product, BlogPost, Video, SiteImages, GithubConfig, SocialLinks } from '../types';
 import { generateFileContent, updateGithubFile } from '../services/githubService';
-import { syncProductsFromStore } from '../services/geminiService';
 
 const Admin: React.FC = () => {
   const { 
@@ -13,8 +12,7 @@ const Admin: React.FC = () => {
     addProduct, deleteProduct, updateProduct, 
     addPost, deletePost, updatePost,
     addVideo, deleteVideo,
-    updateSiteImages, updateSocialLinks,
-    setProducts 
+    updateSiteImages
   } = useContent();
   
   const { t, language } = useLanguage();
@@ -25,17 +23,13 @@ const Admin: React.FC = () => {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isAdding, setIsAdding] = useState(false);
 
-  // Form states with proper typing to satisfy TS
   const [productForm, setProductForm] = useState<Partial<Product>>({});
   const [postForm, setPostForm] = useState<Partial<BlogPost>>({});
   const [videoForm, setVideoForm] = useState<Partial<Video>>({});
   const [imagesForm, setImagesForm] = useState<SiteImages>(siteImages);
-  const [socialForm, setSocialForm] = useState<SocialLinks>(socialLinks);
-  const [storeUrl, setStoreUrl] = useState(localStorage.getItem('astro_store_url') || '');
-
+  
   const [githubConfig, setGithubConfig] = useState<GithubConfig>({ owner: '', repo: '', token: '' });
   const [isPublishing, setIsPublishing] = useState(false);
-  const [isSyncing, setIsSyncing] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
 
   useEffect(() => {
@@ -77,7 +71,6 @@ const Admin: React.FC = () => {
   const handleSaveProduct = () => {
     if (!productForm.title || !productForm.price) return alert('Required fields missing');
     
-    // Explicitly mapping form state to satisfy Product type
     const productData: Omit<Product, 'id'> = {
       title: productForm.title || '',
       titleEn: productForm.titleEn,
@@ -109,17 +102,6 @@ const Admin: React.FC = () => {
     };
     if (editingId) updatePost(editingId, postData);
     else addPost(postData);
-    resetForms();
-  };
-
-  const handleSaveVideo = () => {
-    if (!videoForm.title || !videoForm.youtubeUrl) return alert('Title and URL are required');
-    addVideo({
-      title: videoForm.title || '',
-      titleEn: videoForm.titleEn,
-      youtubeUrl: videoForm.youtubeUrl || '',
-      date: new Date().toLocaleDateString()
-    });
     resetForms();
   };
 
@@ -165,7 +147,6 @@ const Admin: React.FC = () => {
           </div>
         </div>
 
-        {/* Tabs */}
         <div className="flex space-x-4 mb-8 border-b overflow-x-auto">
           {(['products', 'blog', 'videos', 'settings'] as const).map(tab => (
             <button 
@@ -190,20 +171,12 @@ const Admin: React.FC = () => {
                      <div className="space-y-4">
                        <label className="block text-sm font-bold">Title (GR)</label>
                        <input className="w-full p-2 border rounded" value={productForm.title || ''} onChange={e => setProductForm({...productForm, title: e.target.value})} />
-                       
-                       <label className="block text-sm font-bold">Title (EN)</label>
-                       <input className="w-full p-2 border rounded" value={productForm.titleEn || ''} onChange={e => setProductForm({...productForm, titleEn: e.target.value})} />
-                       
                        <label className="block text-sm font-bold">Price</label>
                        <input className="w-full p-2 border rounded" value={productForm.price || ''} onChange={e => setProductForm({...productForm, price: e.target.value})} />
                      </div>
                      <div className="space-y-4">
                        <label className="block text-sm font-bold">Image URL</label>
                        <input className="w-full p-2 border rounded" value={productForm.imageUrl || ''} onChange={e => setProductForm({...productForm, imageUrl: e.target.value})} />
-                       
-                       <label className="block text-sm font-bold">Buy Link</label>
-                       <input className="w-full p-2 border rounded" value={productForm.buyLink || ''} onChange={e => setProductForm({...productForm, buyLink: e.target.value})} />
-
                        <label className="block text-sm font-bold">Description</label>
                        <textarea className="w-full p-2 border rounded h-24" value={productForm.description || ''} onChange={e => setProductForm({...productForm, description: e.target.value})} />
                      </div>
@@ -243,14 +216,6 @@ const Admin: React.FC = () => {
                    <div>
                      <label className="block text-sm font-bold mb-1">Profile Image</label>
                      <input className="w-full p-2 border rounded" value={imagesForm.homeProfile} onChange={e => setImagesForm({...imagesForm, homeProfile: e.target.value})} />
-                   </div>
-                   <div>
-                     <label className="block text-sm font-bold mb-1">Bio Main Image</label>
-                     <input className="w-full p-2 border rounded" value={imagesForm.bioMain} onChange={e => setImagesForm({...imagesForm, bioMain: e.target.value})} />
-                   </div>
-                   <div>
-                     <label className="block text-sm font-bold mb-1">Footer Video URL</label>
-                     <input className="w-full p-2 border rounded" value={imagesForm.footerVideo || ''} onChange={e => setImagesForm({...imagesForm, footerVideo: e.target.value})} />
                    </div>
                  </div>
                  <button onClick={() => { updateSiteImages(imagesForm); alert('Images updated'); }} className="mt-4 bg-mystic-dark text-white px-6 py-2 rounded font-bold">Update Images</button>
