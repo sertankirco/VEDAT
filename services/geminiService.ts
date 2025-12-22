@@ -1,17 +1,11 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { Language, Product } from "../types";
 
-const apiKey = process.env.API_KEY || '';
-const ai = new GoogleGenAI({ apiKey });
+// Always use process.env.API_KEY directly for initialization as per guidelines
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
 
 export const generateHoroscope = async (sign: string, language: Language = 'el'): Promise<string> => {
-  if (!apiKey) {
-    return language === 'el' 
-      ? "Η υπηρεσία προβλέψεων δεν είναι διαθέσιμη αυτή τη στιγμή (Missing API Key)." 
-      : "Horoscope service is currently unavailable (Missing API Key).";
-  }
-
+  // The API key is a hard requirement assumed to be present in the environment
   const prompt = `
     Act as the famous astrologer Vedat Delek.
     Write a daily astrological prediction for the zodiac sign: ${sign}.
@@ -26,6 +20,7 @@ export const generateHoroscope = async (sign: string, language: Language = 'el')
       contents: prompt,
     });
     
+    // Correctly accessing the .text property (not a method)
     return response.text || (language === 'el' ? "Δεν μπορέσαμε να λάβουμε την πρόβλεψη." : "Could not retrieve the prediction.");
   } catch (error) {
     console.error("Gemini API Error (Horoscope):", error);
@@ -36,10 +31,6 @@ export const generateHoroscope = async (sign: string, language: Language = 'el')
 };
 
 export const askAstrologer = async (question: string, language: Language = 'el'): Promise<string> => {
-  if (!apiKey) {
-    return language === 'el' ? "Η υπηρεσία δεν είναι διαθέσιμη." : "Service unavailable.";
-  }
-
   const prompt = `
     You are the astrologer Vedat Delek. Answer the following user question:
     "${question}"
@@ -53,6 +44,7 @@ export const askAstrologer = async (question: string, language: Language = 'el')
       model: 'gemini-3-flash-preview',
       contents: prompt,
     });
+    // Correctly accessing the .text property
     return response.text || (language === 'el' ? "Δεν υπάρχει απάντηση." : "No answer available.");
   } catch (error) {
     console.error("Gemini API Error (Ask):", error);
@@ -66,7 +58,6 @@ export const askAstrologer = async (question: string, language: Language = 'el')
  * Syncs products from a store URL using Gemini Search Grounding.
  */
 export const syncProductsFromStore = async (storeUrl: string): Promise<Omit<Product, 'id'>[]> => {
-  if (!apiKey) throw new Error("API Key missing");
   if (!storeUrl) throw new Error("Store URL missing");
 
   const prompt = `
@@ -114,7 +105,9 @@ export const syncProductsFromStore = async (storeUrl: string): Promise<Omit<Prod
       }
     });
 
-    const jsonStr = response.text.trim();
+    // Extracting text output from response.text directly
+    const text = response.text;
+    const jsonStr = text ? text.trim() : '[]';
     const products: Omit<Product, 'id'>[] = JSON.parse(jsonStr);
     return products;
   } catch (error) {

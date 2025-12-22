@@ -1,4 +1,3 @@
-
 import { ZodiacSign, BlogPost, Product, Video, SiteImages, SocialLinks } from './types';
 
 export const ZODIAC_SIGNS: ZodiacSign[] = [
@@ -123,6 +122,22 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: "25€",
     imageUrl: "https://i.etsystatic.com/62718937/r/il/8652d8/7530939215/il_794xN.7530939215_c8v5.jpg",
     buyLink: "https://www.etsy.com/listing/4419537846"
+  },
+  {
+    id: 13,
+    title: "Ανάλυση Διελεύσεων (6 Μήνες)",
+    description: "Πώς οι πλανήτες αυτή τη στιγμή επηρεάζουν τη ζωή σας. Λεπτομερής εξάμηνη πρόβλεψη.",
+    price: "135€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/64860d/7530938741/il_794xN.7530938741_e8sh.jpg",
+    buyLink: "https://www.etsy.com/shop/AstrologVedatDelekEU"
+  },
+  {
+    id: 14,
+    title: "Πρόβλεψη Επόμενου Μήνα",
+    description: "Μάθετε τις τάσεις και τις ευκαιρίες που σας περιμένουν τον επόμενο μήνα.",
+    price: "80€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/15f212/7530938885/il_794xN.7530938885_fsw5.jpg",
+    buyLink: "https://www.etsy.com/shop/AstrologVedatDelekEU"
   }
 ];
 

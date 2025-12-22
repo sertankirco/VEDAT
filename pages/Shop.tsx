@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { useContent } from '../context/ContentContext';
-import { ShoppingBag, ExternalLink, Star, ShieldCheck, CheckCircle, Globe } from 'lucide-react';
+import { ShoppingBag, ExternalLink, Star, ShieldCheck, Globe } from 'lucide-react';
 
 const Shop: React.FC = () => {
   const { products } = useContent();
@@ -48,12 +47,12 @@ const Shop: React.FC = () => {
                 key={product.id} 
                 className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100 flex flex-col h-full transform hover:-translate-y-1"
               >
-                {/* Image Section - FIXED: No cutting anymore */}
-                <div className="relative aspect-square bg-[#f3f4f6] overflow-hidden p-4">
+                {/* Image Section - FIXED: Using object-contain and bg-gray-100 to ensure no cutting */}
+                <div className="relative aspect-square bg-gray-50 overflow-hidden flex items-center justify-center p-2">
                   <img 
                     src={product.imageUrl} 
                     alt={product.title} 
-                    className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
+                    className="max-w-full max-h-full object-contain transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute top-4 right-4">
                     <span className="bg-mystic-dark text-white font-black px-3 py-1.5 rounded-lg shadow-xl text-sm border border-white/20">
@@ -67,7 +66,7 @@ const Shop: React.FC = () => {
                   <h2 className="text-lg font-serif text-mystic-dark font-bold mb-3 group-hover:text-mystic-gold transition-colors leading-snug min-h-[3rem] flex items-start">
                     {product.title}
                   </h2>
-                  <p className="text-slate-500 text-xs leading-relaxed mb-6 flex-grow">
+                  <p className="text-slate-500 text-xs leading-relaxed mb-6 flex-grow line-clamp-3">
                     {product.description}
                   </p>
                   
