@@ -30,8 +30,8 @@ export const INITIAL_POSTS: BlogPost[] = [
 export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 1,
-    title: "Ανάλυση Γενέθλιου Χάρτη (Birth Chart)",
-    description: "Η απόλυτη ανάλυση του πεπρωμένου σας. Μάθετε τις δυνατότητες, τις προκλήσεις και τον σκοπό της ζωής σας.",
+    title: "Προσωπική Ανάλυση Γενέθλιου Χάρτη",
+    description: "Πλήρης χαρτογράφηση του πεπρωμένου σας. Η πιο σημαντική ανάλυση για την αυτογνωσία σας.",
     price: "150€",
     imageUrl: "https://i.etsystatic.com/62718937/r/il/57c8c4/7530939179/il_794xN.7530939179_8g9w.jpg",
     buyLink: "https://www.etsy.com/listing/4419539660"
@@ -39,7 +39,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 2,
     title: "Ανάλυση Συναστρίας & Σχέσεων",
-    description: "Κατανοήστε τη σχέση σας σε βάθος. Συμβατότητα και καρμικοί δεσμοί μεταξύ δύο ανθρώπων.",
+    description: "Ανακαλύψτε τη χημεία και τους καρμικούς δεσμούς που σας συνδέουν με τον/την σύντροφό σας.",
     price: "180€",
     imageUrl: "https://i.etsystatic.com/62718937/r/il/64860d/7530938741/il_794xN.7530938741_e8sh.jpg",
     buyLink: "https://www.etsy.com/listing/4419541894"
@@ -47,7 +47,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 3,
     title: "Καρμική Αστρολογική Ανάλυση",
-    description: "Ανακαλύψτε τα καρμικά χρέη και τα μαθήματα που κουβαλάει η ψυχή σας από προηγούμενες ζωές.",
+    description: "Εις βάθος μελέτη των προηγούμενων ενσαρκώσεων και των μαθημάτων που πρέπει να λάβετε σήμερα.",
     price: "160€",
     imageUrl: "https://i.etsystatic.com/62718937/r/il/c81062/7530938637/il_794xN.7530938637_25at.jpg",
     buyLink: "https://www.etsy.com/listing/4419532735"
@@ -55,57 +55,73 @@ export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 4,
     title: "Ετήσια Πρόβλεψη (Solar Return)",
-    description: "Ο οδηγός σας για την επόμενη χρονιά. Μάθετε τι θα συμβεί από τα γενέθλιά σας μέχρι τα επόμενα.",
+    description: "Ο οδηγός της χρονιάς σας. Μάθετε τα σημαντικότερα γεγονότα που έρχονται στους επόμενους 12 μήνες.",
     price: "120€",
     imageUrl: "https://i.etsystatic.com/62718937/r/il/15f212/7530938885/il_794xN.7530938885_fsw5.jpg",
     buyLink: "https://www.etsy.com/listing/4419530804"
   },
   {
     id: 5,
-    title: "Επαγγελματικός Προσανατολισμός",
-    description: "Βρείτε το ιδανικό επάγγελμα και το δρόμο προς την οικονομική επιτυχία μέσω του χάρτη σας.",
-    price: "140€",
-    imageUrl: "https://i.etsystatic.com/62718937/r/il/697956/7530939023/il_794xN.7530939023_nt2q.jpg",
-    buyLink: "https://www.etsy.com/shop/AstrologVedatDelekEU"
+    title: "Ωριαία Αστρολογία",
+    description: "Ξεκάθαρες απαντήσεις σε συγκεκριμένα ερωτήματα που απαιτούν άμεση λήψη απόφασης.",
+    price: "90€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/057106/7530938927/il_794xN.7530938927_101l.jpg",
+    buyLink: "https://www.etsy.com/listing/4419528926"
   },
   {
     id: 6,
-    title: "Ωριαία Αστρολογία (Συγκεκριμένη Ερώτηση)",
-    description: "Έχετε μια κρίσιμη ερώτηση; Λάβετε μια ξεκάθαρη απάντηση 'Ναι' ή 'Όχι' με αστρολογική τεκμηρίωση.",
-    price: "90€",
-    imageUrl: "https://i.etsystatic.com/62718937/r/il/057106/7530938927/il_794xN.7530938927_101l.jpg",
-    buyLink: "https://www.etsy.com/shop/AstrologVedatDelekEU"
+    title: "Επαγγελματικός Προσανατολισμός",
+    description: "Αναλύστε την καριέρα και τα οικονομικά σας. Βρείτε την καταλληλότερη επαγγελματική στέγη.",
+    price: "140€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/697956/7530939023/il_794xN.7530939023_nt2q.jpg",
+    buyLink: "https://www.etsy.com/listing/4419534571"
   },
   {
     id: 7,
-    title: "Επιλογή Τυχερής Ημερομηνίας (Electional)",
-    description: "Βρείτε την καταλληλότερη στιγμή για γάμο, έναρξη επιχείρησης ή σημαντικές υπογραφές.",
-    price: "100€",
-    imageUrl: "https://i.etsystatic.com/62718937/r/il/5092a0/7530939103/il_794xN.7530939103_6f7f.jpg",
-    buyLink: "https://www.etsy.com/shop/AstrologVedatDelekEU"
+    title: "Ιατρική Αστρολογία & Ευεξία",
+    description: "Εντοπίστε τις σωματικές ευαισθησίες και βελτιώστε την ποιότητα ζωής σας μέσω των άστρων.",
+    price: "140€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/ec9990/7530939071/il_794xN.7530939071_r6v2.jpg",
+    buyLink: "https://www.etsy.com/listing/4419536000"
   },
   {
     id: 8,
-    title: "Ανάλυση Διελεύσεων (6 Μήνες)",
-    description: "Πώς οι πλανήτες αυτή τη στιγμή επηρεάζουν τη ζωή σας. Λεπτομερής εξάμηνη πρόβλεψη.",
-    price: "130€",
-    imageUrl: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=800&auto=format&fit=crop",
-    buyLink: "https://www.etsy.com/shop/AstrologVedatDelekEU"
+    title: "Επιλογή Τυχερής Ημερομηνίας",
+    description: "Βρείτε την ιδανική στιγμή για γάμο, εγκαίνια ή σημαντικά ξεκινήματα για μέγιστη επιτυχία.",
+    price: "100€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/5092a0/7530939103/il_794xN.7530939103_6f7f.jpg",
+    buyLink: "https://www.etsy.com/listing/4419525439"
   },
   {
     id: 9,
-    title: "Ιατρική Αστρολογία (Συμβουλευτική)",
-    description: "Εντοπίστε τις ευαισθησίες του οργανισμού σας και μάθετε πώς να ενισχύσετε την ευεξία σας αστρολογικά.",
-    price: "140€",
-    imageUrl: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=800&auto=format&fit=crop",
-    buyLink: "https://www.etsy.com/shop/AstrologVedatDelekEU"
+    title: "Διόρθωση Ώρας Γέννησης",
+    description: "Εάν δεν γνωρίζετε την ακριβή ώρα γέννησής σας, την εντοπίζουμε μέσω των σημαντικών γεγονότων της ζωής σας.",
+    price: "120€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/6630f1/7530939139/il_794xN.7530939139_o61y.jpg",
+    buyLink: "https://www.etsy.com/listing/4419523281"
   },
   {
     id: 10,
+    title: "Αστρολογία Μετακόμισης (Relocation)",
+    description: "Ποια πόλη ή χώρα είναι η πιο τυχερή για εσάς; Ανακαλύψτε πού πρέπει να ζήσετε.",
+    price: "130€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/a6b0c3/7530939163/il_794xN.7530939163_ntsw.jpg",
+    buyLink: "https://www.etsy.com/listing/4419521002"
+  },
+  {
+    id: 11,
+    title: "Ανάλυση Αστεροειδών",
+    description: "Προσθέστε λεπτομέρεια στην ανάλυσή σας με τη μελέτη των αστεροειδών στον χάρτη σας.",
+    price: "110€",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/8f8b8a/7530939191/il_794xN.7530939191_9pzo.jpg",
+    buyLink: "https://www.etsy.com/listing/4419518005"
+  },
+  {
+    id: 12,
     title: "Βιβλίο: Το Κάρμα της Αγάπης",
-    description: "Ο οδηγός του Βεντάτ Ντελέκ για την κατανόηση των σχέσεων και την εύρεση της αληθινής αγάπης.",
+    description: "Ο απόλυτος οδηγός του Βεντάτ Ντελέκ για τις σχέσεις. Διαθέσιμο σε ψηφιακή και έντυπη μορφή.",
     price: "25€",
-    imageUrl: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop",
+    imageUrl: "https://i.etsystatic.com/62718937/r/il/8652d8/7530939215/il_794xN.7530939215_c8v5.jpg",
     buyLink: "https://www.etsy.com/listing/4419537846"
   }
 ];
