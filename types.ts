@@ -21,7 +21,6 @@ export interface BlogPost {
   imageUrl: string;
 }
 
-// Added missing optional fields to the Product interface to fix Admin.tsx type errors
 export interface Product {
   id: number;
   title: string;

@@ -1,9 +1,9 @@
+
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import process from 'node:process';
 
 export default defineConfig(({ mode }) => {
-  // Fix: Explicitly using process.cwd() with typed import to load environment variables correctly
   const env = loadEnv(mode, process.cwd(), '');
   return {
     plugins: [react()],
@@ -18,10 +18,11 @@ export default defineConfig(({ mode }) => {
       },
     },
     define: {
-      'process.env.API_KEY': JSON.stringify(env.API_KEY),
+      // Ensure API_KEY is stringified properly for the build replacement
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
     },
-    // Removed invalid property historyApiFallback from server options to fix TS error
     server: {
+      port: 3000
     }
   };
 });
