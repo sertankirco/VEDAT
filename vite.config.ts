@@ -21,7 +21,9 @@ export default defineConfig(({ mode }) => {
       'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
     },
     server: {
-      port: 3000
+      port: 3000,
+      host: true, // Επιτρέπει την πρόσβαση από εξωτερικές διευθύνσεις και βοηθά στην επίλυση προβλημάτων proxy
+      strictPort: true
     }
   };
 });

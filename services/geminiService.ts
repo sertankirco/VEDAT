@@ -2,8 +2,8 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Language, Product } from "../types";
 
-// Always initialize with process.env.API_KEY as per guidelines
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+// Always initialize with process.env.API_KEY directly as a named parameter
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
 
 export const generateHoroscope = async (sign: string, language: Language = 'el'): Promise<string> => {
   const prompt = `
@@ -20,7 +20,7 @@ export const generateHoroscope = async (sign: string, language: Language = 'el')
       contents: prompt,
     });
     
-    // Safety check for response.text
+    // Using .text property directly as per instructions
     return response.text ?? (language === 'el' ? "Η πρόβλεψη δεν είναι διαθέσιμη." : "Prediction unavailable.");
   } catch (error) {
     console.error("Gemini API Error (Horoscope):", error);
