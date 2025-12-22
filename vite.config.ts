@@ -9,21 +9,14 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     build: {
       outDir: 'dist',
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            vendor: ['react', 'react-dom', 'react-router-dom', '@google/genai'],
-          },
-        },
-      },
+      sourcemap: false
     },
     define: {
-      'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || '')
     },
     server: {
       port: 3000,
-      host: true, // Επιτρέπει την πρόσβαση από εξωτερικές διευθύνσεις και βοηθά στην επίλυση προβλημάτων proxy
-      strictPort: true
+      host: true
     }
   };
 });
