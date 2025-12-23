@@ -1,5 +1,5 @@
 
-export type Language = 'el' | 'en';
+export type Language = 'el' | 'en' | 'tr';
 
 export interface ZodiacSign {
   id: string;
@@ -67,4 +67,30 @@ export interface GithubConfig {
   owner: string;
   repo: string;
   token: string;
+}
+
+// --- Yeni Yönetim Paneli Tipleri ---
+
+export interface AiSettings {
+  systemInstruction: string;
+  temperature: number;
+  tone: 'Mystic' | 'Professional' | 'Friendly' | 'Funny';
+  maxTokens: number;
+}
+
+export interface AiLog {
+  id: string;
+  timestamp: string;
+  type: 'Horoscope' | 'Chat';
+  query: string;
+  response: string;
+  status: 'Success' | 'Error';
+  latency: number;
+}
+
+export interface AdminMetrics {
+  totalRequests: number;
+  activeUsers: number;
+  apiCost: string;
+  successRate: string;
 }

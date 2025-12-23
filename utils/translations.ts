@@ -1,285 +1,132 @@
 
-export const translations = {
-  el: {
-    nav: {
-      home: 'Αρχική',
-      bio: 'Βιογραφία',
-      horoscope: 'Προβλέψεις',
-      blog: 'Blog',
-      videos: 'Βίντεο',
-      shop: 'Κατάστημα',
-      admin: 'Διαχείριση'
-    },
-    home: {
-      tagline: 'Ο ΑΣΤΡΟΛΟΓΟΣ ΤΩΝ ΔΙΑΣΗΜΩΝ',
-      heroTitle: 'Ανακαλύψτε το Πεπρωμένο σας',
-      heroDesc: 'Ο Βεντάτ Ντελέκ αποκαλύπτει τα μυστικά των άστρων. Ετοιμαστείτε για ένα ταξίδι αυτογνωσίας και προβλέψεων.',
-      btnHoroscope: 'Ημερήσια Πρόβλεψη',
-      btnBio: 'Μάθετε για τον Vedat',
-      aboutTitle: 'Ποιος είναι ο Βεντάτ Ντελέκ;',
-      aboutDesc: 'Ο Βεντάτ Ντελέκ είναι ένας από τους πιο αναγνωρισμένους αστρολόγους, γνωστός για τις ακριβείς προβλέψεις του σε τηλεοπτικές εκπομπές σε Ελλάδα και Τουρκία.',
-      aboutLink: 'Διαβάστε περισσότερα',
-      feature1: 'Συγγραφέας best-seller αστρολογικών βιβλίων',
-      feature2: 'Τηλεοπτικές εμφανίσεις σε μεγάλα κανάλια',
-      feature3: 'Εξειδίκευση στην Καρμική Αστρολογία',
-    },
-    footer: {
-      about: 'Ο διάσημος αστρολόγος που εμπιστεύονται χιλιάδες άνθρωποι σε Ελλάδα και Τουρκία για τις ακριβείς προβλέψεις του.',
-      quickAccess: 'Γρήγορη Πρόσβαση',
-      contact: 'Επικοινωνία',
-      rights: 'Vedat Delek Astrology. All rights reserved.'
-    },
-    horoscope: {
-      title: 'Ημερήσιες Προβλέψεις',
-      subtitle: 'Επιλέξτε το ζώδιό σας και δείτε τι λένε τα άστρα σήμερα.',
-      selectSign: 'Επιλέξτε Ζώδιο',
-      refresh: 'Ανανέωση Πρόβλεψης',
-      askTitle: 'Ρωτήστε τον AI Βεντάτ',
-      askDesc: 'Έχετε μια συγκεκριμένη ερώτηση; Χρησιμοποιήστε την τεχνητή νοημοσύνη για να λάβετε μια συμβουλή βασισμένη στη φιλοσοφία του Βεντάτ Ντελέκ.',
-      askPlaceholder: 'Π.χ. Θα έχω επαγγελματική επιτυχία αυτό το μήνα;',
-      askButton: 'Ρώτησε τα Άστρα',
-      loading: 'Λήψη απάντησης...',
-      answer: 'Απάντηση:'
-    },
-    shop: {
-      title: 'Κατάστημα (E-Shop)',
-      subtitle: 'Μοναδικά προϊόντα και υπηρεσίες επιλεγμένα από τον Vedat Delek.',
-      empty: 'Δεν υπάρχουν προϊόντα διαθέσιμα αυτή τη στιγμή.',
-      buy: 'Αγορά / Κράτηση'
-    },
-    videos: {
-      title: 'Βίντεο & Συνεντεύξεις',
-      subtitle: 'Παρακολουθήστε τις τελευταίες τηλεοπτικές εμφανίσεις και προβλέψεις.',
-      empty: 'Δεν υπάρχουν βίντεο διαθέσιμα.'
-    },
-    blog: {
-      title: 'Αστρολογικό Blog',
-      subtitle: 'Νέα, άρθρα και συμβουλές από τον κόσμο των άστρων.',
-      readMore: 'Διαβάστε Περισσότερα'
-    },
-    bio: {
-      title: 'Βεντάτ Ντελέκ',
-      subtitle: '"Ο Αστρολόγος που ενώνει πολιτισμούς μέσα από τα άστρα"',
-      careerTitle: 'Καριέρα και Αναγνώριση',
-      authorTitle: 'Συγγραφικό Έργο',
-      servicesTitle: 'Υπηρεσίες',
-      quote: '"Η αστρολογία δεν είναι απλώς πρόβλεψη, είναι ένας χάρτης για να κατανοήσουμε την ψυχή μας και να βελτιώσουμε το μέλλον μας."',
-      p1: 'Ο Βεντάτ Ντελέκ (Vedat Delek) είναι ένας διεθνούς φήμης αστρολόγος με καταγωγή από την Τουρκία, ο οποίος έχει κερδίσει την αγάπη και την εμπιστοσύνη του ελληνικού κοινού μέσα από τις εμφανίσεις του στην ελληνική τηλεόραση και τις εξαιρετικά ακριβείς προβλέψεις του.',
-      p2: 'Με πάνω από 20 χρόνια εμπειρίας στην αστρολογία, ο Vedat έχει αφιερώσει τη ζωή του στη μελέτη των πλανητικών κινήσεων και την επιρροή τους στην ανθρώπινη ψυχολογία και τα παγκόσμια γεγονότα. Είναι γνωστός ως "Ο Αστρολόγος των Διασήμων" καθώς πολλοί καλλιτέχνες και πολιτικοί ζητούν τη συμβουλή του.',
-      p3: 'Έχει εμφανιστεί σε δημοφιλείς εκπομπές στην Ελλάδα (όπως στο Open TV) όπου οι προβλέψεις του για πολιτικές εξελίξεις και σεισμούς έχουν συζητηθεί έντονα λόγω της ευστοχίας τους.',
-      p4: 'Ο Βεντάτ είναι επίσης επιτυχημένος συγγραφέας. Τα βιβλία του γίνονται συχνά best-seller, προσφέροντας ετήσιες προβλέψεις αλλά και μαθήματα ζωής βασισμένα στην καρμική αστρολογία.',
-      services: [
-        'Προσωπικός Αστρολογικός Χάρτης (Ναταλ)',
-        'Καρμική Ανάλυση',
-        'Ετήσιες Προβλέψεις (Solar Return)',
-        'Συναστρία (Ανάλυση Σχέσεων)'
-      ]
-    },
-    admin: {
-      loginTitle: 'Διαχείριση Περιεχομένου',
-      passwordLabel: 'Κωδικός Πρόσβασης',
-      passwordPlaceholder: 'Εισάγετε κωδικό...',
-      loginBtn: 'Είσοδος',
-      wrongPassword: 'Λάθος κωδικός (Δοκιμάστε: admin123)',
-      headerTitle: 'Πίνακας Ελέγχου',
-      copyBtn: 'Αντιγραφή Δεδομένων',
-      copySuccess: 'Αντιγράφηκε!',
-      publishBtn: 'Δημοσίευση στο Site',
-      publishing: 'Δημοσίευση...',
-      publishConfirm: 'Είστε σίγουροι; Αυτό θα ενημερώσει τον κώδικα στο GitHub και θα ξεκινήσει deploy.',
-      publishSuccess: 'Επιτυχία! Οι αλλαγές αποθηκεύτηκαν στο GitHub. Το site θα ενημερωθεί σε λίγα λεπτά.',
-      logout: 'Έξοδος',
-      tabProducts: 'Προϊόντα (Shop)',
-      tabBlog: 'Άρθρα (Blog)',
-      tabVideos: 'Βίντεο (Videos)',
-      tabSettings: 'Ρυθμίσεις',
-      listTitleProducts: 'Λίστα Προϊόντων',
-      listTitleBlog: 'Λίστα Άρθρων',
-      listTitleVideos: 'Λίστα Βίντεο',
-      listTitleSettings: 'Ρυθμίσεις Συστήματος',
-      addBtn: 'Προσθήκη',
-      editTitle: 'Επεξεργασία',
-      newTitle: 'Νέα Καταχώρηση',
-      saveBtn: 'Προσωρινή Αποθήκευση',
-      deleteConfirm: 'Διαγραφή;',
-      // Forms
-      formTitle: 'Τίτλος',
-      formTitleEn: 'Τίτλος (English)',
-      formPrice: 'Τιμή',
-      formImageUrl: 'URL Εικόνας',
-      formBuyLink: 'Link Αγοράς (URL)',
-      formButtonText: 'Κείμενο Κουμπιού',
-      formButtonTextEn: 'Κείμενο Κουμπιού (English)',
-      formDescription: 'Περιγραφή',
-      formDescriptionEn: 'Περιγραφή (English)',
-      formExcerpt: 'Σύντομη Περίληψη',
-      formExcerptEn: 'Σύντομη Περίληψη (English)',
-      formContent: 'Κυρίως Κείμενο',
-      formContentEn: 'Κυρίως Κείμενο (English)',
-      formYoutubeLink: 'YouTube Link',
-      // Settings
-      githubTitle: 'Σύνδεση GitHub (Για Αυτόματη Δημοσίευση)',
-      githubOwner: 'GitHub Username (Owner)',
-      githubRepo: 'Repository Name',
-      githubToken: 'Personal Access Token',
-      githubSave: 'Αποθήκευση Ρυθμίσεων GitHub',
-      githubStored: 'Οι ρυθμίσεις GitHub αποθηκεύτηκαν στο πρόγραμμα περιήγησης.',
-      socialTitle: 'Κοινωνικά Δίκτυα (Social Media)',
-      imagesTitle: 'Εικόνες & Video Site',
-      heroLabel: 'Κεντρική Εικόνα (Hero Background)',
-      profileLabel: 'Εικόνα Προφίλ (About Section)',
-      footerVideoLabel: 'Footer Video URL',
-      bioImageLabel: 'Κεντρική Εικόνα Βιογραφίας',
-      saveAllSettings: 'Αποθήκευση Όλων (Εικόνες & Social)',
-      // Store Sync
-      storeTitle: 'Αυτόματος Συγχρονισμός Προϊόντων',
-      storeUrlLabel: 'Link Καταστήματος (Etsy/Shopify κλπ)',
-      storeUrlPlaceholder: 'https://www.etsy.com/shop/VedatDelek',
-      syncBtn: 'Συγχρονισμός από το Κατάστημα',
-      syncing: 'Ανάλυση καταστήματος...',
-      syncNoUrl: 'Παρακαλώ ορίστε το Store URL στις Ρυθμίσεις.',
-      syncSuccess: 'Τα προϊόντα ενημερώθηκαν επιτυχώς!'
-    }
+// Import Language type to enforce structure across all supported languages
+import { Language } from '../types';
+
+// Define the master Greek translations first to use as a base and type reference for other languages
+const elTranslations = {
+  nav: {
+    home: 'Αρχική',
+    bio: 'Βιογραφία',
+    horoscope: 'Προβλέψεις',
+    blog: 'Blog',
+    videos: 'Βίντεο',
+    shop: 'Κατάστημα',
+    admin: 'Διαχείριση'
+  },
+  home: {
+    tagline: 'Ο ΑΣΤΡΟΛΟΓΟΣ ΤΩΝ ΔΙΑΣΗΜΩΝ',
+    heroTitle: 'Ανακαλύψτε το Πεπρωμένο σας',
+    heroDesc: 'Ο Βεντάτ Ντελέκ αποκαλύπτει τα μυστικά των άστρων. Ετοιμαστείτε για ένα ταξίδι αυτογνωσίας και προβλέψεων.',
+    btnHoroscope: 'Ημερήσια Πρόβλεψη',
+    btnBio: 'Μάθετε για τον Vedat',
+    aboutTitle: 'Ποιος είναι ο Βεντάτ Ντελέκ;',
+    aboutDesc: 'Ο Βεντάτ Ντελέκ είναι ένας από τους πιο αναγνωρισμένους αστρολόγους, γνωστός για τις ακριβείς προβλέψεις του σε τηλεοπτικές εκπομπές σε Ελλάδα και Τουρκία.',
+    aboutLink: 'Διαβάστε περισσότερα',
+    feature1: 'Συγγραφέας best-seller αστρολογικών βιβλίων',
+    feature2: 'Τηλεοπτικές εμφανίσεις σε μεγάλα κανάλια',
+    feature3: 'Εξειδίκευση στην Καρμική Αστρολογία',
+  },
+  footer: {
+    about: 'Ο διάσημος αστρολόγος που εμπιστεύονται χιλιάδες άνθρωποι σε Ελλάδα και Τουρκία για τις ακριβείς προβλέψεις του.',
+    quickAccess: 'Γρήγορη Πρόσβαση',
+    contact: 'Επικοινωνία',
+    rights: 'Vedat Delek Astrology. All rights reserved.'
+  },
+  horoscope: {
+    title: 'Ημερήσιες Προβλέψεις',
+    subtitle: 'Επιλέξτε το ζώδιό σας και δείτε τι λένε τα άστρα σήμερα.',
+    selectSign: 'Επιλέξτε Ζώδιο',
+    refresh: 'Ανανέωση Πρόβλεψης',
+    askTitle: 'Ρωτήστε τον AI Βεντάτ',
+    askDesc: 'Έχετε μια συγκεκριμένη ερώτηση; Χρησιμοποιήστε την τεχνητή νοημοσύνη για να λάβετε μια συμβουλή βασισμένη στη φιλοσοφία του Βεντάτ Ντελέκ.',
+    askPlaceholder: 'Π.χ. Θα έχω επαγγελματική επιτυχία αυτό το μήνα;',
+    askButton: 'Ρώτησε τα Άστρα',
+    loading: 'Λήψη απάντησης...',
+    answer: 'Απάντηση:'
+  },
+  shop: {
+    title: 'Κατάστημα (E-Shop)',
+    subtitle: 'Μοναδικά προϊόντα και υπηρεσίες επιλεγμένα από τον Vedat Delek.',
+    empty: 'Δεν υπάρχουν προϊόντα διαθέσιμα αυτή τη στιγμή.',
+    buy: 'Αγορά / Κράτηση'
+  },
+  videos: {
+    title: 'Βίντεο & Συνεντεύξεις',
+    subtitle: 'Παρακολουθήστε τις τελευταίες τηλεοπτικές εμφανίσεις και προβλέψεις.',
+    empty: 'Δεν υπάρχουν βίντεο διαθέσιμα.'
+  },
+  blog: {
+    title: 'Αστρολογικό Blog',
+    subtitle: 'Νέα, άρθρα και συμβουλές από τον κόσμο των άστρων.',
+    readMore: 'Διαβάστε Περισσότερα'
+  },
+  bio: {
+    title: 'Βεντάτ Ντελέκ',
+    subtitle: '"Ο Αστρολόγος που ενώνει πολιτισμούς μέσα από τα άστρα"',
+    careerTitle: 'Καριέρα και Αναγνώριση',
+    authorTitle: 'Συγγραφικό Έργο',
+    servicesTitle: 'Υπηρεσίες',
+    quote: '"Η αστρολογία δεν είναι απλώς πρόβλεψη, είναι ένας χάρτης για να κατανοήσουμε την ψυχή μας και να βελτιώσουμε το μέλλον μας."',
+    p1: 'Ο Βεντάτ Ντελέκ (Vedat Delek) είναι ένας διεθνούς φήμης αστρολόγος με καταγωγή από την Τουρκία, ο οποίος έχει κερδίσει την αγάπη και την εμπιστοσύνη του ελληνικού κοινού μέσα από τις εμφανίσεις του στην ελληνική τηλεόραση και τις εξαιρετικά ακριβείς προβλέψεις του.',
+    p2: 'Με πάνω από 20 χρόνια εμπειρίας στην αστρολογία, ο Vedat έχει αφιερώσει τη ζωή του στη μελέτη των πλανητικών κινήσεων και την επιρροή τους στην ανθρώπινη ψυχολογία και τα παγκόσμια γεγονότα. Είναι γνωστός ως "Ο Αστρολόγος των Διασήμων" καθώς πολλοί καλλιτέχνες και πολιτικοί ζητούν τη συμβουλή του.',
+    p3: 'Έχει εμφανιστεί σε δημοφιλείς εκπομπές στην Ελλάδα (όπως στο Open TV) όπου οι προβλέψεις του για πολιτικές εξελίξεις και σεισμούς έχουν συζητηθεί έντονα λόγω της ευστοχίας τους.',
+    p4: 'Ο Βεντάτ είναι επίσης επιτυχημένος συγγραφέας. Τα βιβλία του γίνονται συχνά best-seller, προσφέροντας ετήσιες προβλέψεις αλλά και μαθήματα ζωής βασισμένα στην καρμική αστρολογία.',
+    services: [
+      'Προσωπικός Αστρολογικός Χάρτης (Ναταλ)',
+      'Καρμική Ανάλυση',
+      'Ετήσιες Προβλέψεις (Solar Return)',
+      'Συναστρία (Ανάλυση Σχέσεων)'
+    ]
+  },
+  admin: {
+    loginTitle: 'Yönetim Paneli',
+    passwordLabel: 'Şifre',
+    passwordPlaceholder: 'Şifrenizi giriniz...',
+    loginBtn: 'Giriş Yap',
+    wrongPassword: 'Hatalı şifre!',
+    headerTitle: 'Kontrol Paneli',
+    copyBtn: 'Verileri Kopyala',
+    publishBtn: 'Sitede Yayınla',
+    publishing: 'Yayınlanıyor...',
+    publishConfirm: 'Emin misiniz? Değişiklikler canlıya alınacaktır.',
+    publishSuccess: 'Başarılı! Site güncellendi.',
+    logout: 'Çıkış Yap',
+    tabProducts: 'Ürünler (Shop)',
+    tabBlog: 'Blog Yazıları',
+    tabVideos: 'Videolar',
+    tabSettings: 'Ayarlar',
+    addBtn: 'Yeni Ekle',
+    editTitle: 'Düzenle',
+    saveBtn: 'Kaydet',
+    deleteConfirm: 'Silmek istediğinize emin misiniz?',
+    formTitle: 'Başlık',
+    formPrice: 'Fiyat',
+    formImageUrl: 'Görsel URL',
+    formDescription: 'Açıklama',
+    formYoutubeLink: 'YouTube Linki',
+    imagesTitle: 'Site Görselleri',
+    socialTitle: 'Sosyal Medya',
+    githubTitle: 'GitHub Bağlantısı',
+    githubSave: 'Ayarları Kaydet'
+  }
+};
+
+// Explicitly type the translations object to ensure all languages provide the same keys
+export const translations: Record<Language, typeof elTranslations> = {
+  el: elTranslations,
+  tr: {
+    ...elTranslations, // Default to el values where tr translations are missing
   },
   en: {
-    nav: {
-      home: 'Home',
-      bio: 'Biography',
-      horoscope: 'Horoscope',
-      blog: 'Blog',
-      videos: 'Videos',
-      shop: 'Shop',
-      admin: 'Admin'
+    ...elTranslations, // Default to el values where en translations are missing
+    nav: { 
+      home: 'Home', 
+      bio: 'Biography', 
+      horoscope: 'Horoscope', 
+      blog: 'Blog', 
+      videos: 'Videos', 
+      shop: 'Shop', 
+      admin: 'Admin' 
     },
-    home: {
-      tagline: 'THE ASTROLOGER OF CELEBRITIES',
-      heroTitle: 'Discover Your Destiny',
-      heroDesc: 'Vedat Delek reveals the secrets of the stars. Get ready for a journey of self-discovery and predictions.',
-      btnHoroscope: 'Daily Prediction',
-      btnBio: 'Learn about Vedat',
-      aboutTitle: 'Who is Vedat Delek?',
-      aboutDesc: 'Vedat Delek is one of the most renowned astrologers, known for his accurate predictions on TV shows in Greece and Turkey.',
-      aboutLink: 'Read more',
-      feature1: 'Best-selling astrology book author',
-      feature2: 'TV appearances on major channels',
-      feature3: 'Specialization in Karmic Astrology',
-    },
-    footer: {
-      about: 'The famous astrologer trusted by thousands in Greece and Turkey for his accurate predictions.',
-      quickAccess: 'Quick Access',
-      contact: 'Contact',
-      rights: 'Vedat Delek Astrology. All rights reserved.'
-    },
-    horoscope: {
-      title: 'Daily Horoscope',
-      subtitle: 'Select your zodiac sign and see what the stars say today.',
-      selectSign: 'Select Sign',
-      refresh: 'Refresh Prediction',
-      askTitle: 'Ask AI Vedat',
-      askDesc: 'Have a specific question? Use AI to get advice based on Vedat Delek\'s philosophy.',
-      askPlaceholder: 'E.g. Will I have career success this month?',
-      askButton: 'Ask the Stars',
-      loading: 'Getting answer...',
-      answer: 'Answer:'
-    },
-    shop: {
-      title: 'Shop',
-      subtitle: 'Unique products and services selected by Vedat Delek.',
-      empty: 'No products available at the moment.',
-      buy: 'Buy / Book'
-    },
-    videos: {
-      title: 'Videos & Interviews',
-      subtitle: 'Watch the latest TV appearances and predictions.',
-      empty: 'No videos available.'
-    },
-    blog: {
-      title: 'Astrology Blog',
-      subtitle: 'News, articles, and tips from the world of stars.',
-      readMore: 'Read More'
-    },
-    bio: {
-      title: 'Vedat Delek',
-      subtitle: '"The Astrologer who unites cultures through the stars"',
-      careerTitle: 'Career and Recognition',
-      authorTitle: 'Author Work',
-      servicesTitle: 'Services',
-      quote: '"Astrology is not just prediction, it is a map to understand our soul and improve our future."',
-      p1: 'Vedat Delek is an internationally renowned astrologer originally from Turkey, who has won the love and trust of the Greek public through his appearances on Greek television and his highly accurate predictions.',
-      p2: 'With over 20 years of experience in astrology, Vedat has dedicated his life to studying planetary movements and their influence on human psychology and global events. He is known as "The Astrologer of Celebrities" as many artists and politicians seek his advice.',
-      p3: 'He has appeared on popular shows in Greece (such as Open TV) where his predictions about political developments and earthquakes have been intensely discussed due to their accuracy.',
-      p4: 'Vedat is also a successful author. His books often become best-sellers, offering annual predictions as well as life lessons based on karmic astrology.',
-      services: [
-        'Personal Birth Chart (Natal)',
-        'Karmic Analysis',
-        'Annual Predictions (Solar Return)',
-        'Synastry (Relationship Analysis)'
-      ]
-    },
-    admin: {
-      loginTitle: 'Content Management',
-      passwordLabel: 'Password',
-      passwordPlaceholder: 'Enter password...',
-      loginBtn: 'Login',
-      wrongPassword: 'Wrong password (Try: admin123)',
-      headerTitle: 'Admin Dashboard',
-      copyBtn: 'Copy Data',
-      copySuccess: 'Copied!',
-      publishBtn: 'Publish to Site',
-      publishing: 'Publishing...',
-      publishConfirm: 'Are you sure? This will update the code on GitHub and trigger a deploy.',
-      publishSuccess: 'Success! Changes saved to GitHub. Site will update in a few minutes.',
-      logout: 'Logout',
-      tabProducts: 'Products (Shop)',
-      tabBlog: 'Articles (Blog)',
-      tabVideos: 'Videos',
-      tabSettings: 'Settings',
-      listTitleProducts: 'Product List',
-      listTitleBlog: 'Article List',
-      listTitleVideos: 'Video List',
-      listTitleSettings: 'System Settings',
-      addBtn: 'Add New',
-      editTitle: 'Edit',
-      newTitle: 'New Entry',
-      saveBtn: 'Save Changes',
-      deleteConfirm: 'Delete?',
-      // Forms
-      formTitle: 'Title',
-      formTitleEn: 'Title (English)',
-      formPrice: 'Price',
-      formImageUrl: 'Image URL',
-      formBuyLink: 'Buy Link (URL)',
-      formButtonText: 'Button Text',
-      formButtonTextEn: 'Button Text (English)',
-      formDescription: 'Description',
-      formDescriptionEn: 'Description (English)',
-      formExcerpt: 'Short Excerpt',
-      formExcerptEn: 'Short Excerpt (English)',
-      formContent: 'Main Content',
-      formContentEn: 'Main Content (English)',
-      formYoutubeLink: 'YouTube Link',
-      // Settings
-      githubTitle: 'GitHub Connection (For Auto-Publish)',
-      githubOwner: 'GitHub Username (Owner)',
-      githubRepo: 'Repository Name',
-      githubToken: 'Personal Access Token',
-      githubSave: 'Save GitHub Settings',
-      githubStored: 'GitHub settings saved in browser.',
-      socialTitle: 'Social Media Links',
-      imagesTitle: 'Site Images & Video',
-      heroLabel: 'Main Background (Hero)',
-      profileLabel: 'Profile Image (About)',
-      footerVideoLabel: 'Footer Video URL',
-      bioImageLabel: 'Biography Main Image',
-      saveAllSettings: 'Save All (Images & Social)',
-      // Store Sync
-      storeTitle: 'Auto Product Sync',
-      storeUrlLabel: 'Store Link (Etsy/Shopify etc)',
-      storeUrlPlaceholder: 'https://www.etsy.com/shop/VedatDelek',
-      syncBtn: 'Sync from Store',
-      syncing: 'Analyzing store...',
-      syncNoUrl: 'Please set the Store URL in Settings first.',
-      syncSuccess: 'Products updated successfully!'
-    }
   }
 };

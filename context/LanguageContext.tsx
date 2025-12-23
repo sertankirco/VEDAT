@@ -6,6 +6,7 @@ import { translations } from '../utils/translations';
 interface LanguageContextType {
   language: Language;
   toggleLanguage: () => void;
+  // Reference the base Greek translation structure for the context type
   t: typeof translations['el'];
 }
 
@@ -18,6 +19,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setLanguage(prev => prev === 'el' ? 'en' : 'el');
   };
 
+  // Type inference now correctly resolves translations[language] to the full schema
   const t = translations[language];
 
   return (

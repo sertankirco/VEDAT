@@ -9,7 +9,6 @@ interface ContentContextType {
   videos: Video[];
   siteImages: SiteImages;
   socialLinks: SocialLinks;
-  setProducts: (products: Product[]) => void;
   addProduct: (product: Omit<Product, 'id'>) => void;
   updateProduct: (id: number, product: Partial<Product>) => void;
   deleteProduct: (id: number) => void;
@@ -26,16 +25,15 @@ interface ContentContextType {
 const ContentContext = createContext<ContentContextType | undefined>(undefined);
 
 const STORAGE_KEYS = {
-  PRODUCTS: 'astro_products',
-  POSTS: 'astro_posts',
-  VIDEOS: 'astro_videos',
-  IMAGES: 'astro_site_images',
-  SOCIAL: 'astro_social_links'
+  PRODUCTS: 'astro_products_v2',
+  POSTS: 'astro_posts_v2',
+  VIDEOS: 'astro_videos_v2',
+  IMAGES: 'astro_site_images_v2',
+  SOCIAL: 'astro_social_links_v2'
 };
 
 export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Initial load from localStorage or fallback to constants
-  const [products, setProductsState] = useState<Product[]>(() => {
+  const [products, setProducts] = useState<Product[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
     return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
   });
@@ -60,7 +58,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return saved ? JSON.parse(saved) : INITIAL_SOCIAL_LINKS;
   });
 
-  // Persist to localStorage whenever state changes
+  // Αυτόματη αποθήκευση στο localStorage για Instant Update
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(products));
     localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(posts));
@@ -69,24 +67,20 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     localStorage.setItem(STORAGE_KEYS.SOCIAL, JSON.stringify(socialLinks));
   }, [products, posts, videos, siteImages, socialLinks]);
 
-  const setProducts = (newProducts: Product[]) => setProductsState(newProducts);
-
   const addProduct = (product: Omit<Product, 'id'>) => {
-    const newProduct = { ...product, id: Date.now() };
-    setProductsState([newProduct, ...products]);
+    setProducts([{ ...product, id: Date.now() }, ...products]);
   };
 
   const updateProduct = (id: number, updatedFields: Partial<Product>) => {
-    setProductsState(products.map(p => p.id === id ? { ...p, ...updatedFields } : p));
+    setProducts(products.map(p => p.id === id ? { ...p, ...updatedFields } : p));
   };
 
   const deleteProduct = (id: number) => {
-    setProductsState(products.filter(p => p.id !== id));
+    setProducts(products.filter(p => p.id !== id));
   };
 
   const addPost = (post: Omit<BlogPost, 'id'>) => {
-    const newPost = { ...post, id: Date.now() };
-    setPosts([newPost, ...posts]);
+    setPosts([{ ...post, id: Date.now() }, ...posts]);
   };
 
   const updatePost = (id: number, updatedFields: Partial<BlogPost>) => {
@@ -98,8 +92,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const addVideo = (video: Omit<Video, 'id'>) => {
-    const newVideo = { ...video, id: Date.now() };
-    setVideos([newVideo, ...videos]);
+    setVideos([{ ...video, id: Date.now() }, ...videos]);
   };
 
   const deleteVideo = (id: number) => {
@@ -115,8 +108,8 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const resetToDefaults = () => {
-    if (window.confirm('Είσαι σίγουρος; Όλες οι μη δημοσιευμένες αλλαγές θα χαθούν.')) {
-      setProductsState(INITIAL_PRODUCTS);
+    if (window.confirm('Επαναφορά στις αρχικές ρυθμίσεις; Όλες οι αλλαγές θα χαθούν.')) {
+      setProducts(INITIAL_PRODUCTS);
       setPosts(INITIAL_POSTS);
       setVideos(INITIAL_VIDEOS);
       setSiteImages(INITIAL_SITE_IMAGES);
@@ -129,7 +122,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   return (
     <ContentContext.Provider value={{ 
       products, posts, videos, siteImages, socialLinks,
-      setProducts, addProduct, updateProduct, deleteProduct,
+      addProduct, updateProduct, deleteProduct,
       addPost, updatePost, deletePost,
       addVideo, deleteVideo,
       updateSiteImages, updateSocialLinks, resetToDefaults
@@ -141,8 +134,6 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
 export const useContent = () => {
   const context = useContext(ContentContext);
-  if (context === undefined) {
-    throw new Error('useContent must be used within a ContentProvider');
-  }
+  if (context === undefined) throw new Error('useContent must be used within a ContentProvider');
   return context;
 };
