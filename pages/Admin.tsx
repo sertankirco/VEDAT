@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useContent } from '../context/ContentContext';
-import { useLanguage } from '../context/LanguageContext';
 import AdminLayout from '../components/AdminLayout';
 import { 
-  Trash2, Plus, Edit, Save, Github, 
+  Trash2, Plus, Edit, Github, 
   ShoppingBag, FileText, Layout,
   Check, Zap, Users, DollarSign, Activity, 
-  Sparkles, Search, Filter, Download, ExternalLink, 
-  CheckCircle, AlertCircle
+  Sparkles, CheckCircle, AlertCircle
 } from 'lucide-react';
 import { Product, BlogPost, GithubConfig, AiSettings, AdminMetrics, AiLog } from '../types';
 import { generateFileContent, updateGithubFile } from '../services/githubService';
+
+// --- Dahili Bileşenler (Import hatalarını önlemek için) ---
 
 const DashboardView: React.FC = () => {
   const metrics: AdminMetrics = { totalRequests: 12450, activeUsers: 840, apiCost: "$42.12", successRate: "99.2%" };
@@ -100,7 +100,7 @@ const LogsView: React.FC = () => {
 
 const Admin: React.FC = () => {
   const { 
-    products, posts, videos, siteImages, socialLinks,
+    products, posts,
     addProduct, deleteProduct, updateProduct, 
     addPost, deletePost, updatePost,
     resetToDefaults
@@ -128,6 +128,13 @@ const Admin: React.FC = () => {
     else alert("Hatalı Şifre!");
   };
 
+  const resetForms = () => {
+    setProductForm({});
+    setPostForm({});
+    setEditingId(null);
+    setIsAdding(false);
+  };
+
   const renderContentManager = () => (
     <div className="space-y-8 animate-in fade-in">
       <div className="flex gap-2 p-1 bg-slate-900 w-fit rounded-2xl border border-slate-800">
@@ -146,22 +153,62 @@ const Admin: React.FC = () => {
           </button>
         </div>
 
+        {(isAdding || editingId) && (
+          <div className="p-8 bg-slate-900/50 rounded-3xl border border-slate-800 mb-10 animate-in slide-in-from-top">
+             {contentSubTab === 'products' ? (
+               <div className="grid md:grid-cols-2 gap-5">
+                  <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700" placeholder="Ürün Başlığı" value={productForm.title || ''} onChange={e => setProductForm({...productForm, title: e.target.value})} />
+                  <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700" placeholder="Fiyat (örn: 150€)" value={productForm.price || ''} onChange={e => setProductForm({...productForm, price: e.target.value})} />
+                  <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700 md:col-span-2" placeholder="Görsel URL" value={productForm.imageUrl || ''} onChange={e => setProductForm({...productForm, imageUrl: e.target.value})} />
+                  <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700 md:col-span-2" placeholder="Satın Alma Linki" value={productForm.buyLink || ''} onChange={e => setProductForm({...productForm, buyLink: e.target.value})} />
+               </div>
+             ) : (
+               <div className="grid gap-5">
+                  <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700" placeholder="Blog Başlığı" value={postForm.title || ''} onChange={e => setPostForm({...postForm, title: e.target.value})} />
+                  <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700" placeholder="Özet" value={postForm.excerpt || ''} onChange={e => setPostForm({...postForm, excerpt: e.target.value})} />
+                  <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700" placeholder="Görsel URL" value={postForm.imageUrl || ''} onChange={e => setPostForm({...postForm, imageUrl: e.target.value})} />
+                  <textarea className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm h-32 border border-slate-700" placeholder="İçerik" value={postForm.content || ''} onChange={e => setPostForm({...postForm, content: e.target.value})} />
+               </div>
+             )}
+             <div className="mt-6 flex gap-3">
+                <button onClick={() => {
+                   if (contentSubTab === 'products') {
+                     editingId ? updateProduct(editingId, productForm as Product) : addProduct(productForm as Product);
+                   } else {
+                     const data = { ...postForm, date: postForm.date || new Date().toLocaleDateString('el-GR') };
+                     editingId ? updatePost(editingId, data as BlogPost) : addPost(data as BlogPost);
+                   }
+                   resetForms();
+                }} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold text-sm">Kaydet</button>
+                <button onClick={resetForms} className="bg-slate-800 text-slate-300 px-8 py-3 rounded-xl font-bold text-sm">İptal</button>
+             </div>
+          </div>
+        )}
+
         <div className="grid gap-3">
           {contentSubTab === 'products' ? (
             products.map(p => (
               <div key={p.id} className="flex justify-between items-center bg-slate-900/40 p-5 rounded-2xl border border-slate-800 group">
-                <span className="text-white font-bold text-sm">{p.title}</span>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => { if(confirm('Sil?')) deleteProduct(p.id)}} className="p-3 text-red-500 hover:bg-red-500/10 rounded-xl"><Trash2 size={18}/></button>
+                <div className="flex items-center gap-4">
+                  <img src={p.imageUrl} className="w-10 h-10 rounded-lg object-cover bg-slate-800" />
+                  <span className="text-white font-bold text-sm">{p.title}</span>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => { setEditingId(p.id); setProductForm(p); }} className="p-2 text-blue-400 hover:bg-blue-500/10 rounded-lg"><Edit size={16}/></button>
+                  <button onClick={() => { if(confirm('Sil?')) deleteProduct(p.id)}} className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg"><Trash2 size={16}/></button>
                 </div>
               </div>
             ))
           ) : (
             posts.map(post => (
               <div key={post.id} className="flex justify-between items-center bg-slate-900/40 p-5 rounded-2xl border border-slate-800 group">
-                <span className="text-white font-bold text-sm truncate max-w-md">{post.title}</span>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                   <button onClick={() => { if(confirm('Sil?')) deletePost(post.id)}} className="p-3 text-red-500 hover:bg-red-500/10 rounded-xl"><Trash2 size={18}/></button>
+                <div className="flex items-center gap-4">
+                  <img src={post.imageUrl} className="w-10 h-10 rounded-lg object-cover bg-slate-800" />
+                  <span className="text-white font-bold text-sm truncate max-w-xs">{post.title}</span>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => { setEditingId(post.id); setPostForm(post); }} className="p-2 text-blue-400 hover:bg-blue-500/10 rounded-lg"><Edit size={16}/></button>
+                  <button onClick={() => { if(confirm('Sil?')) deletePost(post.id)}} className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg"><Trash2 size={16}/></button>
                 </div>
               </div>
             ))
@@ -200,6 +247,9 @@ const Admin: React.FC = () => {
                <input className="w-full bg-slate-800 border-slate-700 text-white p-4 rounded-xl outline-none" placeholder="Repo" value={githubConfig.repo} onChange={e => setGithubConfig({...githubConfig, repo: e.target.value})} />
                <input className="w-full bg-slate-800 border-slate-700 text-white p-4 rounded-xl outline-none" type="password" placeholder="Token" value={githubConfig.token} onChange={e => setGithubConfig({...githubConfig, token: e.target.value})} />
                <button onClick={() => { localStorage.setItem('astro_github_config', JSON.stringify(githubConfig)); alert('Kaydedildi!'); }} className="w-full bg-blue-600 text-white py-4 rounded-xl font-black uppercase text-xs tracking-widest">Ayarları Kaydet</button>
+               <div className="pt-8 border-t border-slate-800">
+                  <button onClick={resetToDefaults} className="text-red-500 text-xs font-bold uppercase tracking-widest hover:text-red-400">Tüm Verileri Sıfırla</button>
+               </div>
             </div>
          </div>
        )}
