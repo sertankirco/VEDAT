@@ -12,8 +12,6 @@ import {
 import { Product, BlogPost, GithubConfig, AiSettings, AdminMetrics, AiLog } from '../types';
 import { generateFileContent, updateGithubFile } from '../services/githubService';
 
-// --- Sub-Views defined inline to prevent import errors ---
-
 const DashboardView: React.FC = () => {
   const metrics: AdminMetrics = { totalRequests: 12450, activeUsers: 840, apiCost: "$42.12", successRate: "99.2%" };
   return (
