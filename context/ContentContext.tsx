@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { BlogPost, Product, Video, SiteImages, SocialLinks } from '../types';
 import { INITIAL_POSTS, INITIAL_PRODUCTS, INITIAL_VIDEOS, INITIAL_SITE_IMAGES, INITIAL_SOCIAL_LINKS } from '../constants';
 
@@ -20,26 +20,60 @@ interface ContentContextType {
   deleteVideo: (id: number) => void;
   updateSiteImages: (images: Partial<SiteImages>) => void;
   updateSocialLinks: (links: Partial<SocialLinks>) => void;
+  resetToDefaults: () => void;
 }
 
 const ContentContext = createContext<ContentContextType | undefined>(undefined);
 
-export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Initialize with static data
-  const [products, setProductsState] = useState<Product[]>(INITIAL_PRODUCTS);
-  const [posts, setPosts] = useState<BlogPost[]>(INITIAL_POSTS);
-  const [videos, setVideos] = useState<Video[]>(INITIAL_VIDEOS);
-  const [siteImages, setSiteImages] = useState<SiteImages>(INITIAL_SITE_IMAGES);
-  const [socialLinks, setSocialLinks] = useState<SocialLinks>(INITIAL_SOCIAL_LINKS);
+const STORAGE_KEYS = {
+  PRODUCTS: 'astro_products',
+  POSTS: 'astro_posts',
+  VIDEOS: 'astro_videos',
+  IMAGES: 'astro_site_images',
+  SOCIAL: 'astro_social_links'
+};
 
-  // Products
-  const setProducts = (newProducts: Product[]) => {
-    setProductsState(newProducts);
-  };
+export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Initial load from localStorage or fallback to constants
+  const [products, setProductsState] = useState<Product[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
+    return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+  });
+
+  const [posts, setPosts] = useState<BlogPost[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.POSTS);
+    return saved ? JSON.parse(saved) : INITIAL_POSTS;
+  });
+
+  const [videos, setVideos] = useState<Video[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.VIDEOS);
+    return saved ? JSON.parse(saved) : INITIAL_VIDEOS;
+  });
+
+  const [siteImages, setSiteImages] = useState<SiteImages>(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.IMAGES);
+    return saved ? JSON.parse(saved) : INITIAL_SITE_IMAGES;
+  });
+
+  const [socialLinks, setSocialLinks] = useState<SocialLinks>(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.SOCIAL);
+    return saved ? JSON.parse(saved) : INITIAL_SOCIAL_LINKS;
+  });
+
+  // Persist to localStorage whenever state changes
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(products));
+    localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(posts));
+    localStorage.setItem(STORAGE_KEYS.VIDEOS, JSON.stringify(videos));
+    localStorage.setItem(STORAGE_KEYS.IMAGES, JSON.stringify(siteImages));
+    localStorage.setItem(STORAGE_KEYS.SOCIAL, JSON.stringify(socialLinks));
+  }, [products, posts, videos, siteImages, socialLinks]);
+
+  const setProducts = (newProducts: Product[]) => setProductsState(newProducts);
 
   const addProduct = (product: Omit<Product, 'id'>) => {
     const newProduct = { ...product, id: Date.now() };
-    setProductsState([...products, newProduct]);
+    setProductsState([newProduct, ...products]);
   };
 
   const updateProduct = (id: number, updatedFields: Partial<Product>) => {
@@ -50,10 +84,9 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setProductsState(products.filter(p => p.id !== id));
   };
 
-  // Posts
   const addPost = (post: Omit<BlogPost, 'id'>) => {
     const newPost = { ...post, id: Date.now() };
-    setPosts([...posts, newPost]);
+    setPosts([newPost, ...posts]);
   };
 
   const updatePost = (id: number, updatedFields: Partial<BlogPost>) => {
@@ -64,7 +97,6 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setPosts(posts.filter(p => p.id !== id));
   };
 
-  // Videos
   const addVideo = (video: Omit<Video, 'id'>) => {
     const newVideo = { ...video, id: Date.now() };
     setVideos([newVideo, ...videos]);
@@ -74,14 +106,24 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setVideos(videos.filter(v => v.id !== id));
   };
 
-  // Site Images
   const updateSiteImages = (images: Partial<SiteImages>) => {
-    setSiteImages({ ...siteImages, ...images });
+    setSiteImages(prev => ({ ...prev, ...images }));
   };
 
-  // Social Links
   const updateSocialLinks = (links: Partial<SocialLinks>) => {
-    setSocialLinks({ ...socialLinks, ...links });
+    setSocialLinks(prev => ({ ...prev, ...links }));
+  };
+
+  const resetToDefaults = () => {
+    if (window.confirm('Είσαι σίγουρος; Όλες οι μη δημοσιευμένες αλλαγές θα χαθούν.')) {
+      setProductsState(INITIAL_PRODUCTS);
+      setPosts(INITIAL_POSTS);
+      setVideos(INITIAL_VIDEOS);
+      setSiteImages(INITIAL_SITE_IMAGES);
+      setSocialLinks(INITIAL_SOCIAL_LINKS);
+      localStorage.clear();
+      window.location.reload();
+    }
   };
 
   return (
@@ -90,7 +132,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setProducts, addProduct, updateProduct, deleteProduct,
       addPost, updatePost, deletePost,
       addVideo, deleteVideo,
-      updateSiteImages, updateSocialLinks
+      updateSiteImages, updateSocialLinks, resetToDefaults
     }}>
       {children}
     </ContentContext.Provider>
