@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { BlogPost, Product, Video, SiteImages, SocialLinks } from '../types';
 import { INITIAL_POSTS, INITIAL_PRODUCTS, INITIAL_VIDEOS, INITIAL_SITE_IMAGES, INITIAL_SOCIAL_LINKS } from '../constants';
@@ -16,6 +15,7 @@ interface ContentContextType {
   updatePost: (id: number, post: Partial<BlogPost>) => void;
   deletePost: (id: number) => void;
   addVideo: (video: Omit<Video, 'id'>) => void;
+  updateVideo: (id: number, video: Partial<Video>) => void;
   deleteVideo: (id: number) => void;
   updateSiteImages: (images: Partial<SiteImages>) => void;
   updateSocialLinks: (links: Partial<SocialLinks>) => void;
@@ -95,6 +95,10 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setVideos([{ ...video, id: Date.now() }, ...videos]);
   };
 
+  const updateVideo = (id: number, updatedFields: Partial<Video>) => {
+    setVideos(videos.map(v => v.id === id ? { ...v, ...updatedFields } : v));
+  };
+
   const deleteVideo = (id: number) => {
     setVideos(videos.filter(v => v.id !== id));
   };
@@ -124,7 +128,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       products, posts, videos, siteImages, socialLinks,
       addProduct, updateProduct, deleteProduct,
       addPost, updatePost, deletePost,
-      addVideo, deleteVideo,
+      addVideo, updateVideo, deleteVideo,
       updateSiteImages, updateSocialLinks, resetToDefaults
     }}>
       {children}

@@ -5,9 +5,9 @@ import {
   Trash2, Plus, Edit, Github, 
   ShoppingBag, FileText, Layout,
   Check, Zap, Users, DollarSign, Activity, 
-  Sparkles, CheckCircle, AlertCircle
+  Sparkles, CheckCircle, AlertCircle, Video as VideoIcon
 } from 'lucide-react';
-import { Product, BlogPost, GithubConfig, AiSettings, AdminMetrics, AiLog } from '../types';
+import { Product, BlogPost, Video, GithubConfig, AiSettings, AdminMetrics, AiLog } from '../types';
 import { generateFileContent, updateGithubFile } from '../services/githubService';
 
 // --- Dahili Bileşenler (Import hatalarını önlemek için) ---
@@ -100,27 +100,28 @@ const LogsView: React.FC = () => {
 
 const Admin: React.FC = () => {
   const { 
-    products, posts,
+    products, posts, videos,
     addProduct, deleteProduct, updateProduct, 
     addPost, deletePost, updatePost,
+    addVideo, deleteVideo, updateVideo,
     resetToDefaults
   } = useContent();
   
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [activeTab, setActiveTab] = useState<'dashboard' | 'ai-settings' | 'logs' | 'content' | 'settings'>('dashboard');
-  const [contentSubTab, setContentSubTab] = useState<'products' | 'blog'>('blog');
+  const [contentSubTab, setContentSubTab] = useState<'products' | 'blog' | 'videos'>('blog');
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [productForm, setProductForm] = useState<Partial<Product>>({});
   const [postForm, setPostForm] = useState<Partial<BlogPost>>({});
+  const [videoForm, setVideoForm] = useState<Partial<Video>>({});
   
   const [githubConfig, setGithubConfig] = useState<GithubConfig>(() => {
     const saved = localStorage.getItem('astro_github_config');
     return saved ? JSON.parse(saved) : { owner: '', repo: '', token: '' };
   });
-  const [isPublishing, setIsPublishing] = useState(false);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,6 +132,7 @@ const Admin: React.FC = () => {
   const resetForms = () => {
     setProductForm({});
     setPostForm({});
+    setVideoForm({});
     setEditingId(null);
     setIsAdding(false);
   };
@@ -140,12 +142,15 @@ const Admin: React.FC = () => {
       <div className="flex gap-2 p-1 bg-slate-900 w-fit rounded-2xl border border-slate-800">
         <button onClick={() => setContentSubTab('blog')} className={`px-8 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest ${contentSubTab === 'blog' ? 'bg-blue-600 text-white' : 'text-slate-500'}`}>Blog</button>
         <button onClick={() => setContentSubTab('products')} className={`px-8 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest ${contentSubTab === 'products' ? 'bg-blue-600 text-white' : 'text-slate-500'}`}>Ürünler</button>
+        <button onClick={() => setContentSubTab('videos')} className={`px-8 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest ${contentSubTab === 'videos' ? 'bg-blue-600 text-white' : 'text-slate-500'}`}>Videolar</button>
       </div>
 
       <div className="bg-[#0f172a] border border-slate-800/50 p-8 rounded-[32px] shadow-xl">
         <div className="flex justify-between items-center mb-8">
           <h3 className="text-xl font-serif font-bold text-white flex items-center gap-3">
-            {contentSubTab === 'blog' ? <FileText className="text-blue-400" /> : <ShoppingBag className="text-blue-400" />}
+            {contentSubTab === 'blog' ? <FileText className="text-blue-400" /> : 
+             contentSubTab === 'products' ? <ShoppingBag className="text-blue-400" /> :
+             <VideoIcon className="text-blue-400" />}
             Yönetim
           </h3>
           <button onClick={() => setIsAdding(true)} className="bg-yellow-500 text-slate-950 px-6 py-2.5 rounded-xl font-black text-xs uppercase hover:bg-yellow-400 shadow-lg">
@@ -162,21 +167,30 @@ const Admin: React.FC = () => {
                   <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700 md:col-span-2" placeholder="Görsel URL" value={productForm.imageUrl || ''} onChange={e => setProductForm({...productForm, imageUrl: e.target.value})} />
                   <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700 md:col-span-2" placeholder="Satın Alma Linki" value={productForm.buyLink || ''} onChange={e => setProductForm({...productForm, buyLink: e.target.value})} />
                </div>
-             ) : (
+             ) : contentSubTab === 'blog' ? (
                <div className="grid gap-5">
                   <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700" placeholder="Blog Başlığı" value={postForm.title || ''} onChange={e => setPostForm({...postForm, title: e.target.value})} />
                   <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700" placeholder="Özet" value={postForm.excerpt || ''} onChange={e => setPostForm({...postForm, excerpt: e.target.value})} />
                   <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700" placeholder="Görsel URL" value={postForm.imageUrl || ''} onChange={e => setPostForm({...postForm, imageUrl: e.target.value})} />
                   <textarea className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm h-32 border border-slate-700" placeholder="İçerik" value={postForm.content || ''} onChange={e => setPostForm({...postForm, content: e.target.value})} />
                </div>
+             ) : (
+                <div className="grid gap-5">
+                  <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700" placeholder="Video Başlığı" value={videoForm.title || ''} onChange={e => setVideoForm({...videoForm, title: e.target.value})} />
+                  <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700" placeholder="YouTube Linki" value={videoForm.youtubeUrl || ''} onChange={e => setVideoForm({...videoForm, youtubeUrl: e.target.value})} />
+                  <input className="w-full bg-slate-800 text-white p-4 rounded-xl outline-none text-sm border border-slate-700" placeholder="Tarih (İsteğe Bağlı)" value={videoForm.date || ''} onChange={e => setVideoForm({...videoForm, date: e.target.value})} />
+                </div>
              )}
              <div className="mt-6 flex gap-3">
                 <button onClick={() => {
                    if (contentSubTab === 'products') {
                      editingId ? updateProduct(editingId, productForm as Product) : addProduct(productForm as Product);
-                   } else {
+                   } else if (contentSubTab === 'blog') {
                      const data = { ...postForm, date: postForm.date || new Date().toLocaleDateString('el-GR') };
                      editingId ? updatePost(editingId, data as BlogPost) : addPost(data as BlogPost);
+                   } else {
+                     const data = { ...videoForm, date: videoForm.date || new Date().toLocaleDateString('el-GR') };
+                     editingId ? updateVideo(editingId, data as Video) : addVideo(data as Video);
                    }
                    resetForms();
                 }} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold text-sm">Kaydet</button>
@@ -199,7 +213,7 @@ const Admin: React.FC = () => {
                 </div>
               </div>
             ))
-          ) : (
+          ) : contentSubTab === 'blog' ? (
             posts.map(post => (
               <div key={post.id} className="flex justify-between items-center bg-slate-900/40 p-5 rounded-2xl border border-slate-800 group">
                 <div className="flex items-center gap-4">
@@ -209,6 +223,24 @@ const Admin: React.FC = () => {
                 <div className="flex gap-2">
                   <button onClick={() => { setEditingId(post.id); setPostForm(post); }} className="p-2 text-blue-400 hover:bg-blue-500/10 rounded-lg"><Edit size={16}/></button>
                   <button onClick={() => { if(confirm('Sil?')) deletePost(post.id)}} className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg"><Trash2 size={16}/></button>
+                </div>
+              </div>
+            ))
+          ) : (
+            videos.map(video => (
+              <div key={video.id} className="flex justify-between items-center bg-slate-900/40 p-5 rounded-2xl border border-slate-800 group">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center">
+                    <VideoIcon size={20} className="text-slate-400" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-white font-bold text-sm truncate max-w-xs">{video.title}</span>
+                    <span className="text-slate-500 text-xs">{video.date}</span>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => { setEditingId(video.id); setVideoForm(video); }} className="p-2 text-blue-400 hover:bg-blue-500/10 rounded-lg"><Edit size={16}/></button>
+                  <button onClick={() => { if(confirm('Sil?')) deleteVideo(video.id)}} className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg"><Trash2 size={16}/></button>
                 </div>
               </div>
             ))
