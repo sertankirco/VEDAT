@@ -8,7 +8,6 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'dist',
       sourcemap: false,
-      // Büyük dosyaları parçalara ayırarak tarayıcı yükünü hafifletir
       rollupOptions: {
         output: {
           manualChunks: {
@@ -18,7 +17,6 @@ export default defineConfig(({ mode }) => {
         }
       }
     },
-    // API Key'in build sırasında güvenli şekilde işlenmesi
     define: {
       'process.env.API_KEY': JSON.stringify(env.API_KEY || '')
     },
