@@ -1,38 +1,14 @@
 import React, { useState } from 'react';
 import { useContent } from '../context/ContentContext';
 import AdminLayout from '../components/AdminLayout';
+import DashboardView from './Dashboard';
+import AiSettingsView from './AiSettings';
+import LogsView from './Logs';
 import { 
-  Trash2, Plus, Edit, Github, 
-  ShoppingBag, FileText, Layout,
-  Zap, Users, DollarSign, Activity, 
-  Sparkles, Video as VideoIcon
+  Trash2, Plus, Edit, ShoppingBag, 
+  FileText, Video as VideoIcon, Check, X
 } from 'lucide-react';
-import { Product, BlogPost, Video, GithubConfig, AiSettings, AdminMetrics, AiLog } from '../types';
-
-const DashboardView: React.FC = () => {
-  const metrics: AdminMetrics = { totalRequests: 12450, activeUsers: 840, apiCost: "$42.12", successRate: "99.2%" };
-  return (
-    <div className="space-y-8 animate-in fade-in duration-500">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[
-          { t: "İstekler", v: metrics.totalRequests, i: <Zap size={20}/>, c: "bg-yellow-500", tr: "+12%" },
-          { t: "Aktif", v: metrics.activeUsers, i: <Users size={20}/>, c: "bg-blue-500", tr: "+5%" },
-          { t: "Maliyet", v: metrics.apiCost, i: <DollarSign size={20}/>, c: "bg-emerald-500", tr: "-2%" },
-          { t: "Başarı", v: metrics.successRate, i: <Activity size={20}/>, c: "bg-purple-500", tr: "+0.1%" }
-        ].map((m, i) => (
-          <div key={i} className="bg-[#0f172a] border border-slate-800/50 p-6 rounded-3xl shadow-xl">
-             <div className="flex justify-between items-start mb-4">
-                <div className={`p-3 rounded-2xl ${m.c} bg-opacity-10 text-white`}>{m.i}</div>
-                <span className="text-green-500 text-xs font-black">+{m.tr}</span>
-             </div>
-             <h3 className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{m.t}</h3>
-             <div className="text-xl font-black text-white">{m.v}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+import { Product, BlogPost, Video } from '../types';
 
 const Admin: React.FC = () => {
   const { 
@@ -40,17 +16,18 @@ const Admin: React.FC = () => {
     addProduct, deleteProduct, updateProduct, 
     addPost, deletePost, updatePost,
     addVideo, deleteVideo, updateVideo,
-    resetToDefaults
+    onLogout
   } = useContent();
   
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'content' | 'settings'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'ai-settings' | 'logs' | 'content' | 'settings'>('dashboard');
   const [contentSubTab, setContentSubTab] = useState<'products' | 'blog' | 'videos'>('blog');
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   
+  // Forms
   const [productForm, setProductForm] = useState<Partial<Product>>({});
   const [postForm, setPostForm] = useState<Partial<BlogPost>>({});
   const [videoForm, setVideoForm] = useState<Partial<Video>>({});
@@ -70,84 +47,149 @@ const Admin: React.FC = () => {
   };
 
   const renderContentManager = () => (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in duration-500">
+      {/* Sub Tabs */}
       <div className="flex gap-2 p-1 bg-slate-900 w-fit rounded-2xl border border-slate-800">
-        <button onClick={() => setContentSubTab('blog')} className={`px-6 py-2 rounded-xl text-xs font-black uppercase ${contentSubTab === 'blog' ? 'bg-blue-600 text-white' : 'text-slate-500'}`}>Blog</button>
-        <button onClick={() => setContentSubTab('products')} className={`px-6 py-2 rounded-xl text-xs font-black uppercase ${contentSubTab === 'products' ? 'bg-blue-600 text-white' : 'text-slate-500'}`}>Ürünler</button>
-        <button onClick={() => setContentSubTab('videos')} className={`px-6 py-2 rounded-xl text-xs font-black uppercase ${contentSubTab === 'videos' ? 'bg-blue-600 text-white' : 'text-slate-500'}`}>Videolar</button>
+        <button 
+          onClick={() => setContentSubTab('blog')} 
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${contentSubTab === 'blog' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-slate-300'}`}
+        >
+          <FileText size={14} /> Blog
+        </button>
+        <button 
+          onClick={() => setContentSubTab('products')} 
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${contentSubTab === 'products' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-slate-300'}`}
+        >
+          <ShoppingBag size={14} /> Ürünler
+        </button>
+        <button 
+          onClick={() => setContentSubTab('videos')} 
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${contentSubTab === 'videos' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-slate-300'}`}
+        >
+          <VideoIcon size={14} /> Videolar
+        </button>
       </div>
 
       <div className="bg-[#0f172a] border border-slate-800/50 p-8 rounded-[32px] shadow-xl">
         <div className="flex justify-between items-center mb-8">
-          <h3 className="text-xl font-serif font-bold text-white flex items-center gap-3 capitalize">
-            {contentSubTab} Yönetimi
+          <h3 className="text-xl font-serif font-bold text-white flex items-center gap-3">
+             {contentSubTab === 'blog' ? 'Blog Yazıları' : contentSubTab === 'products' ? 'E-Shop Ürünleri' : 'Video Galerisi'}
           </h3>
-          <button onClick={() => setIsAdding(true)} className="bg-yellow-500 text-slate-950 px-6 py-2 rounded-xl font-black text-xs uppercase shadow-lg">
-            <Plus size={16} className="inline mr-1" /> Yeni
+          <button 
+            onClick={() => { resetForms(); setIsAdding(true); }} 
+            className="bg-yellow-500 text-slate-950 px-6 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-yellow-400 transition-all flex items-center gap-2"
+          >
+            <Plus size={16} /> Yeni Ekle
           </button>
         </div>
 
+        {/* Add/Edit Form Overlay */}
         {(isAdding || editingId) && (
-          <div className="p-6 bg-slate-900/50 rounded-2xl border border-slate-800 mb-8 animate-in slide-in-from-top">
-             {contentSubTab === 'products' && (
-               <div className="grid grid-cols-2 gap-4">
-                  <input className="bg-slate-800 text-white p-3 rounded-xl border border-slate-700" placeholder="Ürün Başlığı" value={productForm.title || ''} onChange={e => setProductForm({...productForm, title: e.target.value})} />
-                  <input className="bg-slate-800 text-white p-3 rounded-xl border border-slate-700" placeholder="Fiyat" value={productForm.price || ''} onChange={e => setProductForm({...productForm, price: e.target.value})} />
-                  <input className="bg-slate-800 text-white p-3 rounded-xl border border-slate-700 col-span-2" placeholder="Görsel URL" value={productForm.imageUrl || ''} onChange={e => setProductForm({...productForm, imageUrl: e.target.value})} />
-               </div>
-             )}
-             {contentSubTab === 'blog' && (
-               <div className="grid gap-4">
-                  <input className="bg-slate-800 text-white p-3 rounded-xl border border-slate-700" placeholder="Blog Başlığı" value={postForm.title || ''} onChange={e => setPostForm({...postForm, title: e.target.value})} />
-                  <textarea className="bg-slate-800 text-white p-3 rounded-xl border border-slate-700 h-24" placeholder="İçerik" value={postForm.content || ''} onChange={e => setPostForm({...postForm, content: e.target.value})} />
-               </div>
-             )}
-             {contentSubTab === 'videos' && (
-               <div className="grid gap-4">
-                  <input className="bg-slate-800 text-white p-3 rounded-xl border border-slate-700" placeholder="Video Başlığı" value={videoForm.title || ''} onChange={e => setVideoForm({...videoForm, title: e.target.value})} />
-                  <input className="bg-slate-800 text-white p-3 rounded-xl border border-slate-700" placeholder="YouTube URL" value={videoForm.youtubeUrl || ''} onChange={e => setVideoForm({...videoForm, youtubeUrl: e.target.value})} />
-               </div>
-             )}
-             <div className="mt-4 flex gap-2">
-                <button onClick={() => {
-                   if (contentSubTab === 'products') editingId ? updateProduct(editingId, productForm) : addProduct(productForm as Product);
-                   else if (contentSubTab === 'blog') editingId ? updatePost(editingId, postForm) : addPost(postForm as BlogPost);
-                   else editingId ? updateVideo(editingId, videoForm) : addVideo(videoForm as Video);
-                   resetForms();
-                }} className="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold">Kaydet</button>
-                <button onClick={resetForms} className="bg-slate-800 text-slate-300 px-6 py-2 rounded-xl">İptal</button>
+          <div className="p-8 bg-slate-900/80 rounded-3xl border border-blue-500/30 mb-10 animate-in slide-in-from-top-4 duration-300">
+             <h4 className="text-white font-bold mb-6 flex items-center gap-2">
+               {editingId ? <Edit size={18} className="text-blue-400"/> : <Plus size={18} className="text-yellow-400"/>}
+               {editingId ? 'Kaydı Düzenle' : 'Yeni Kayıt Oluştur'}
+             </h4>
+             
+             <div className="grid gap-6">
+                {contentSubTab === 'products' && (
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500 transition-colors" placeholder="Ürün Başlığı" value={productForm.title || ''} onChange={e => setProductForm({...productForm, title: e.target.value})} />
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500 transition-colors" placeholder="Fiyat (örn: 150€)" value={productForm.price || ''} onChange={e => setProductForm({...productForm, price: e.target.value})} />
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500 transition-colors col-span-2" placeholder="Görsel URL" value={productForm.imageUrl || ''} onChange={e => setProductForm({...productForm, imageUrl: e.target.value})} />
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500 transition-colors col-span-2" placeholder="Satın Alma Linki (Etsy)" value={productForm.buyLink || ''} onChange={e => setProductForm({...productForm, buyLink: e.target.value})} />
+                  </div>
+                )}
+
+                {contentSubTab === 'blog' && (
+                  <div className="grid gap-4">
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500 transition-colors" placeholder="Blog Başlığı" value={postForm.title || ''} onChange={e => setPostForm({...postForm, title: e.target.value})} />
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500 transition-colors" placeholder="Görsel URL" value={postForm.imageUrl || ''} onChange={e => setPostForm({...postForm, imageUrl: e.target.value})} />
+                    <textarea className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500 transition-colors h-32" placeholder="Blog İçeriği" value={postForm.content || ''} onChange={e => setPostForm({...postForm, content: e.target.value})} />
+                  </div>
+                )}
+
+                {contentSubTab === 'videos' && (
+                  <div className="grid gap-4">
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500 transition-colors" placeholder="Video Başlığı" value={videoForm.title || ''} onChange={e => setVideoForm({...videoForm, title: e.target.value})} />
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500 transition-colors" placeholder="YouTube URL (örn: https://youtube.com/watch?v=...)" value={videoForm.youtubeUrl || ''} onChange={e => setVideoForm({...videoForm, youtubeUrl: e.target.value})} />
+                  </div>
+                )}
+             </div>
+
+             <div className="mt-8 flex gap-3">
+                <button 
+                  onClick={() => {
+                    if (contentSubTab === 'products') {
+                      editingId ? updateProduct(editingId, productForm) : addProduct(productForm as Product);
+                    } else if (contentSubTab === 'blog') {
+                      const data = { ...postForm, date: postForm.date || new Date().toLocaleDateString('el-GR') };
+                      editingId ? updatePost(editingId, data) : addPost(data as BlogPost);
+                    } else {
+                      const data = { ...videoForm, date: videoForm.date || new Date().toLocaleDateString('el-GR') };
+                      editingId ? updateVideo(editingId, data) : addVideo(data as Video);
+                    }
+                    resetForms();
+                  }} 
+                  className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-500 transition-all"
+                >
+                  <Check size={18} /> Kaydet
+                </button>
+                <button onClick={resetForms} className="bg-slate-800 text-slate-300 px-8 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-slate-700 transition-all">
+                  <X size={18} /> İptal
+                </button>
              </div>
           </div>
         )}
 
-        <div className="space-y-2">
+        {/* Content List */}
+        <div className="space-y-3">
           {contentSubTab === 'products' && products.map(p => (
-            <div key={p.id} className="flex justify-between items-center bg-slate-900/40 p-4 rounded-xl border border-slate-800">
-              <span className="text-white text-sm font-bold">{p.title}</span>
-              <div className="flex gap-2">
-                <button onClick={() => { setEditingId(p.id); setProductForm(p); }} className="text-blue-400"><Edit size={16}/></button>
-                <button onClick={() => deleteProduct(p.id)} className="text-red-500"><Trash2 size={16}/></button>
+            <div key={p.id} className="flex justify-between items-center bg-slate-900/40 p-5 rounded-2xl border border-slate-800 hover:border-slate-700 transition-all group">
+              <div className="flex items-center gap-4">
+                <img src={p.imageUrl} className="w-12 h-12 rounded-xl object-cover border border-slate-700" alt={p.title} />
+                <div>
+                  <div className="text-white font-bold text-sm">{p.title}</div>
+                  <div className="text-slate-500 text-xs font-black uppercase tracking-widest">{p.price}</div>
+                </div>
+              </div>
+              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => { setEditingId(p.id); setProductForm(p); }} className="p-2.5 bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white rounded-xl transition-all"><Edit size={16}/></button>
+                <button onClick={() => { if(confirm('Silinsin mi?')) deleteProduct(p.id)}} className="p-2.5 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded-xl transition-all"><Trash2 size={16}/></button>
               </div>
             </div>
           ))}
-          {contentSubTab === 'blog' && posts.map(p => (
-            <div key={p.id} className="flex justify-between items-center bg-slate-900/40 p-4 rounded-xl border border-slate-800">
-              <span className="text-white text-sm font-bold">{p.title}</span>
-              <div className="flex gap-2">
-                <button onClick={() => { setEditingId(p.id); setPostForm(p); }} className="text-blue-400"><Edit size={16}/></button>
-                <button onClick={() => deletePost(p.id)} className="text-red-500"><Trash2 size={16}/></button>
+
+          {contentSubTab === 'blog' && posts.map(post => (
+            <div key={post.id} className="flex justify-between items-center bg-slate-900/40 p-5 rounded-2xl border border-slate-800 hover:border-slate-700 transition-all group">
+              <div className="flex items-center gap-4">
+                <img src={post.imageUrl} className="w-12 h-12 rounded-xl object-cover border border-slate-700" alt={post.title} />
+                <div>
+                  <div className="text-white font-bold text-sm truncate max-w-xs">{post.title}</div>
+                  <div className="text-slate-500 text-xs font-black uppercase tracking-widest">{post.date}</div>
+                </div>
+              </div>
+              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => { setEditingId(post.id); setPostForm(post); }} className="p-2.5 bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white rounded-xl transition-all"><Edit size={16}/></button>
+                <button onClick={() => { if(confirm('Silinsin mi?')) deletePost(post.id)}} className="p-2.5 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded-xl transition-all"><Trash2 size={16}/></button>
               </div>
             </div>
           ))}
-          {contentSubTab === 'videos' && videos.map(v => (
-            <div key={v.id} className="flex justify-between items-center bg-slate-900/40 p-4 rounded-xl border border-slate-800">
-              <div className="flex items-center gap-3">
-                <VideoIcon size={16} className="text-blue-400" />
-                <span className="text-white text-sm font-bold">{v.title}</span>
+
+          {contentSubTab === 'videos' && videos.map(video => (
+            <div key={video.id} className="flex justify-between items-center bg-slate-900/40 p-5 rounded-2xl border border-slate-800 hover:border-slate-700 transition-all group">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center border border-slate-700 text-blue-400">
+                  <VideoIcon size={20} />
+                </div>
+                <div>
+                  <div className="text-white font-bold text-sm truncate max-w-xs">{video.title}</div>
+                  <div className="text-slate-500 text-xs truncate max-w-[200px]">{video.youtubeUrl}</div>
+                </div>
               </div>
-              <div className="flex gap-2">
-                <button onClick={() => { setEditingId(v.id); setVideoForm(v); }} className="text-blue-400"><Edit size={16}/></button>
-                <button onClick={() => deleteVideo(v.id)} className="text-red-500"><Trash2 size={16}/></button>
+              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => { setEditingId(video.id); setVideoForm(video); }} className="p-2.5 bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white rounded-xl transition-all"><Edit size={16}/></button>
+                <button onClick={() => { if(confirm('Silinsin mi?')) deleteVideo(video.id)}} className="p-2.5 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded-xl transition-all"><Trash2 size={16}/></button>
               </div>
             </div>
           ))}
@@ -158,14 +200,30 @@ const Admin: React.FC = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#020617] flex items-center justify-center p-6">
-        <div className="bg-[#0f172a] p-10 rounded-[40px] border border-slate-800 shadow-2xl w-full max-w-sm text-center">
-          <Layout className="text-yellow-500 mx-auto mb-4" size={40} />
-          <h2 className="text-white font-serif font-bold text-xl mb-6">Yönetici Girişi</h2>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white text-center outline-none" placeholder="Şifre" />
-            <button type="submit" className="w-full bg-yellow-500 text-slate-950 font-black py-4 rounded-xl uppercase text-xs">Giriş</button>
+      <div className="min-h-screen bg-[#020617] flex items-center justify-center p-6 text-slate-300 font-sans">
+        <div className="bg-[#0f172a] p-12 rounded-[40px] border border-slate-800/50 max-w-sm w-full text-center shadow-2xl">
+          <div className="w-20 h-20 bg-yellow-500/10 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-yellow-500/20">
+            <VideoIcon className="text-yellow-500" size={32} />
+          </div>
+          <h2 className="text-2xl font-serif text-white mb-8 font-black uppercase tracking-tighter">Yönetici Girişi</h2>
+          <form onSubmit={handleLogin} className="space-y-5">
+            <input 
+              type="password" 
+              value={password} 
+              onChange={e => setPassword(e.target.value)} 
+              className="w-full bg-[#020617] border border-slate-800 rounded-2xl p-5 text-white text-center outline-none focus:ring-2 focus:ring-yellow-500/20 transition-all" 
+              placeholder="Şifre" 
+            />
+            <button 
+              type="submit" 
+              className="w-full bg-yellow-500 text-slate-950 font-black py-5 rounded-2xl shadow-xl hover:bg-yellow-400 transition-all uppercase text-xs tracking-widest"
+            >
+              Giriş Yap
+            </button>
           </form>
+          <div className="mt-8 text-[10px] text-slate-600 font-black uppercase tracking-widest italic">
+            Vedat Delek Astrology &copy; 2024
+          </div>
         </div>
       </div>
     );
@@ -174,8 +232,15 @@ const Admin: React.FC = () => {
   return (
     <AdminLayout activeTab={activeTab} setActiveTab={setActiveTab} onLogout={() => setIsAuthenticated(false)}>
        {activeTab === 'dashboard' && <DashboardView />}
+       {activeTab === 'ai-settings' && <AiSettingsView />}
+       {activeTab === 'logs' && <LogsView />}
        {activeTab === 'content' && renderContentManager()}
-       {activeTab === 'settings' && <div className="text-slate-500 italic">Genel ayarlar yakında eklenecek...</div>}
+       {activeTab === 'settings' && (
+          <div className="bg-[#0f172a] border border-slate-800/50 p-10 rounded-[40px] max-w-2xl text-slate-300 animate-in fade-in">
+             <h3 className="text-white font-serif font-bold mb-8 flex items-center gap-3 text-xl">Genel Ayarlar</h3>
+             <p className="text-slate-500 italic text-sm mb-6 leading-relaxed">Bu bölümdeki ayarlar (GitHub Deployment, Sosyal Linkler vb.) çok yakında aktif edilecektir.</p>
+          </div>
+       )}
     </AdminLayout>
   );
 };
