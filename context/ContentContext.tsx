@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { BlogPost, Product, Video, SiteImages, SocialLinks } from '../types';
+import { BlogPost, Product, Video, SiteImages, SocialLinks, GithubConfig } from '../types';
 import { INITIAL_POSTS, INITIAL_PRODUCTS, INITIAL_VIDEOS, INITIAL_SITE_IMAGES, INITIAL_SOCIAL_LINKS } from '../constants';
+import { fetchGithubFile } from '../services/githubService';
 
 interface ContentContextType {
   products: Product[];
@@ -8,6 +9,7 @@ interface ContentContextType {
   videos: Video[];
   siteImages: SiteImages;
   socialLinks: SocialLinks;
+  githubConfig: GithubConfig | null;
   addProduct: (product: Omit<Product, 'id'>) => void;
   updateProduct: (id: number, product: Partial<Product>) => void;
   deleteProduct: (id: number) => void;
@@ -19,6 +21,8 @@ interface ContentContextType {
   deleteVideo: (id: number) => void;
   updateSiteImages: (images: Partial<SiteImages>) => void;
   updateSocialLinks: (links: Partial<SocialLinks>) => void;
+  updateGithubConfig: (config: GithubConfig) => void;
+  fetchDataFromGithub: () => Promise<void>;
   resetToDefaults: () => void;
 }
 
@@ -29,7 +33,8 @@ const STORAGE_KEYS = {
   POSTS: 'astro_posts_v2',
   VIDEOS: 'astro_videos_v2',
   IMAGES: 'astro_site_images_v2',
-  SOCIAL: 'astro_social_links_v2'
+  SOCIAL: 'astro_social_links_v2',
+  GITHUB: 'astro_github_config_v1'
 };
 
 export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -58,14 +63,20 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return saved ? JSON.parse(saved) : INITIAL_SOCIAL_LINKS;
   });
 
-  // Αυτόματη αποθήκευση στο localStorage για Instant Update
+  const [githubConfig, setGithubConfig] = useState<GithubConfig | null>(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.GITHUB);
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  // Otomatik kayıt
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(products));
     localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(posts));
     localStorage.setItem(STORAGE_KEYS.VIDEOS, JSON.stringify(videos));
     localStorage.setItem(STORAGE_KEYS.IMAGES, JSON.stringify(siteImages));
     localStorage.setItem(STORAGE_KEYS.SOCIAL, JSON.stringify(socialLinks));
-  }, [products, posts, videos, siteImages, socialLinks]);
+    if (githubConfig) localStorage.setItem(STORAGE_KEYS.GITHUB, JSON.stringify(githubConfig));
+  }, [products, posts, videos, siteImages, socialLinks, githubConfig]);
 
   const addProduct = (product: Omit<Product, 'id'>) => {
     setProducts([{ ...product, id: Date.now() }, ...products]);
@@ -111,8 +122,24 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setSocialLinks(prev => ({ ...prev, ...links }));
   };
 
+  const updateGithubConfig = (config: GithubConfig) => {
+    setGithubConfig(config);
+  };
+
+  const fetchDataFromGithub = async () => {
+    if (!githubConfig) throw new Error("GitHub ayarları yapılandırılmamış.");
+    
+    const data = await fetchGithubFile(githubConfig);
+    
+    if (data.posts.length) setPosts(data.posts);
+    if (data.products.length) setProducts(data.products);
+    if (data.videos.length) setVideos(data.videos);
+    if (Object.keys(data.siteImages).length) setSiteImages(data.siteImages);
+    if (Object.keys(data.socialLinks).length) setSocialLinks(data.socialLinks);
+  };
+
   const resetToDefaults = () => {
-    if (window.confirm('Επαναφορά στις αρχικές ρυθμίσεις; Όλες οι αλλαγές θα χαθούν.')) {
+    if (window.confirm('Eπαναφορά στις αρχικές ρυθμίσεις; Όλες οι αλλαγές θα χαθούν.')) {
       setProducts(INITIAL_PRODUCTS);
       setPosts(INITIAL_POSTS);
       setVideos(INITIAL_VIDEOS);
@@ -125,11 +152,11 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   return (
     <ContentContext.Provider value={{ 
-      products, posts, videos, siteImages, socialLinks,
+      products, posts, videos, siteImages, socialLinks, githubConfig,
       addProduct, updateProduct, deleteProduct,
       addPost, updatePost, deletePost,
       addVideo, updateVideo, deleteVideo,
-      updateSiteImages, updateSocialLinks, resetToDefaults
+      updateSiteImages, updateSocialLinks, updateGithubConfig, fetchDataFromGithub, resetToDefaults
     }}>
       {children}
     </ContentContext.Provider>

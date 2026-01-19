@@ -6,16 +6,19 @@ import AiSettingsView from './AiSettings';
 import LogsView from './Logs';
 import { 
   Trash2, Plus, Edit, ShoppingBag, 
-  FileText, Video as VideoIcon, Check, X
+  FileText, Video as VideoIcon, Check, X,
+  Github, Save, CloudUpload, DownloadCloud
 } from 'lucide-react';
-import { Product, BlogPost, Video } from '../types';
+import { Product, BlogPost, Video, GithubConfig } from '../types';
+import { generateFileContent, updateGithubFile } from '../services/githubService';
 
 const Admin: React.FC = () => {
   const { 
-    products, posts, videos,
+    products, posts, videos, siteImages, socialLinks,
     addProduct, deleteProduct, updateProduct, 
     addPost, deletePost, updatePost,
-    addVideo, deleteVideo, updateVideo
+    addVideo, deleteVideo, updateVideo,
+    githubConfig, updateGithubConfig, fetchDataFromGithub
   } = useContent();
   
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -25,10 +28,13 @@ const Admin: React.FC = () => {
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   
   const [productForm, setProductForm] = useState<Partial<Product>>({});
   const [postForm, setPostForm] = useState<Partial<BlogPost>>({});
   const [videoForm, setVideoForm] = useState<Partial<Video>>({});
+  const [githubForm, setGithubForm] = useState<GithubConfig>(githubConfig || { owner: '', repo: '', token: '' });
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,26 +50,78 @@ const Admin: React.FC = () => {
     setIsAdding(false);
   };
 
+  const handlePublishToGithub = async () => {
+    if (!githubConfig?.token) {
+      alert("Lütfen önce Ayarlar sekmesinden GitHub bağlantısını yapılandırın.");
+      return;
+    }
+
+    if (!confirm("Tüm değişiklikler GitHub'a gönderilecek ve site yeniden derlenecek. Bu işlem 1-2 dakika sürebilir. Onaylıyor musunuz?")) return;
+
+    setIsPublishing(true);
+    try {
+      const content = generateFileContent(posts, products, videos, siteImages, socialLinks);
+      await updateGithubFile(githubConfig, content);
+      alert("Başarılı! Değişiklikler GitHub'a gönderildi. Vercel otomatik olarak siteyi güncelleyecektir.");
+    } catch (error: any) {
+      console.error(error);
+      alert(`Hata: ${error.message}`);
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
+  const handleFetchFromGithub = async () => {
+    if (!githubConfig?.token) {
+      alert("Lütfen önce GitHub bilgilerini kaydedin.");
+      return;
+    }
+
+    if (!confirm("GitHub'daki veriler panele indirilecek ve mevcut yerel verilerinizin üzerine yazılacak. Onaylıyor musunuz?")) return;
+
+    setIsFetching(true);
+    try {
+      await fetchDataFromGithub();
+      alert("Veriler başarıyla GitHub'dan indirildi ve panele yüklendi.");
+    } catch (error: any) {
+      console.error(error);
+      alert(`İndirme Hatası: ${error.message}`);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
   const renderContentManager = () => (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <div className="flex gap-2 p-1 bg-slate-900 w-fit rounded-2xl border border-slate-800">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex gap-2 p-1 bg-slate-900 w-fit rounded-2xl border border-slate-800">
+          <button 
+            onClick={() => setContentSubTab('blog')} 
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${contentSubTab === 'blog' ? 'bg-blue-600 text-white' : 'text-slate-500 hover:text-slate-300'}`}
+          >
+            <FileText size={14} /> Blog
+          </button>
+          <button 
+            onClick={() => setContentSubTab('products')} 
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${contentSubTab === 'products' ? 'bg-blue-600 text-white' : 'text-slate-500 hover:text-slate-300'}`}
+          >
+            <ShoppingBag size={14} /> Ürünler
+          </button>
+          <button 
+            onClick={() => setContentSubTab('videos')} 
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${contentSubTab === 'videos' ? 'bg-blue-600 text-white' : 'text-slate-500 hover:text-slate-300'}`}
+          >
+            <VideoIcon size={14} /> Videolar
+          </button>
+        </div>
+
         <button 
-          onClick={() => setContentSubTab('blog')} 
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${contentSubTab === 'blog' ? 'bg-blue-600 text-white' : 'text-slate-500 hover:text-slate-300'}`}
+          onClick={handlePublishToGithub}
+          disabled={isPublishing}
+          className="bg-emerald-600 text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-emerald-500 transition-all flex items-center gap-2 shadow-lg shadow-emerald-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <FileText size={14} /> Blog
-        </button>
-        <button 
-          onClick={() => setContentSubTab('products')} 
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${contentSubTab === 'products' ? 'bg-blue-600 text-white' : 'text-slate-500 hover:text-slate-300'}`}
-        >
-          <ShoppingBag size={14} /> Ürünler
-        </button>
-        <button 
-          onClick={() => setContentSubTab('videos')} 
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${contentSubTab === 'videos' ? 'bg-blue-600 text-white' : 'text-slate-500 hover:text-slate-300'}`}
-        >
-          <VideoIcon size={14} /> Videolar
+          <CloudUpload size={16} className={isPublishing ? "animate-bounce" : ""} />
+          {isPublishing ? 'Yayınlanıyor...' : 'Sitede Yayınla (GitHub)'}
         </button>
       </div>
 
@@ -85,34 +143,43 @@ const Admin: React.FC = () => {
              <div className="grid gap-6">
                 {contentSubTab === 'products' && (
                   <div className="grid md:grid-cols-2 gap-4">
-                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700" placeholder="Ürün Başlığı" value={productForm.title || ''} onChange={e => setProductForm({...productForm, title: e.target.value})} />
-                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700" placeholder="Fiyat" value={productForm.price || ''} onChange={e => setProductForm({...productForm, price: e.target.value})} />
-                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 col-span-2" placeholder="Görsel URL" value={productForm.imageUrl || ''} onChange={e => setProductForm({...productForm, imageUrl: e.target.value})} />
-                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 col-span-2" placeholder="Satın Alma Linki" value={productForm.buyLink || ''} onChange={e => setProductForm({...productForm, buyLink: e.target.value})} />
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500" placeholder="Ürün Başlığı" value={productForm.title || ''} onChange={e => setProductForm({...productForm, title: e.target.value})} />
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500" placeholder="Fiyat" value={productForm.price || ''} onChange={e => setProductForm({...productForm, price: e.target.value})} />
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 col-span-2 outline-none focus:border-blue-500" placeholder="Görsel URL" value={productForm.imageUrl || ''} onChange={e => setProductForm({...productForm, imageUrl: e.target.value})} />
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 col-span-2 outline-none focus:border-blue-500" placeholder="Satın Alma Linki" value={productForm.buyLink || ''} onChange={e => setProductForm({...productForm, buyLink: e.target.value})} />
                   </div>
                 )}
                 {contentSubTab === 'blog' && (
                   <div className="grid gap-4">
-                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700" placeholder="Blog Başlığı" value={postForm.title || ''} onChange={e => setPostForm({...postForm, title: e.target.value})} />
-                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700" placeholder="Görsel URL" value={postForm.imageUrl || ''} onChange={e => setPostForm({...postForm, imageUrl: e.target.value})} />
-                    <textarea className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 h-32" placeholder="Blog İçeriği" value={postForm.content || ''} onChange={e => setPostForm({...postForm, content: e.target.value})} />
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500" placeholder="Blog Başlığı" value={postForm.title || ''} onChange={e => setPostForm({...postForm, title: e.target.value})} />
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500" placeholder="Görsel URL" value={postForm.imageUrl || ''} onChange={e => setPostForm({...postForm, imageUrl: e.target.value})} />
+                    <textarea className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500 h-24" placeholder="Kısa Açıklama (Excerpt) - Listede görünecek özet" value={postForm.excerpt || ''} onChange={e => setPostForm({...postForm, excerpt: e.target.value})} />
+                    <textarea className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500 h-48" placeholder="Blog İçeriği (Tam Metin)" value={postForm.content || ''} onChange={e => setPostForm({...postForm, content: e.target.value})} />
                   </div>
                 )}
                 {contentSubTab === 'videos' && (
                   <div className="grid gap-4">
-                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700" placeholder="Video Başlığı" value={videoForm.title || ''} onChange={e => setVideoForm({...videoForm, title: e.target.value})} />
-                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700" placeholder="YouTube URL" value={videoForm.youtubeUrl || ''} onChange={e => setVideoForm({...videoForm, youtubeUrl: e.target.value})} />
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500" placeholder="Video Başlığı" value={videoForm.title || ''} onChange={e => setVideoForm({...videoForm, title: e.target.value})} />
+                    <input className="bg-slate-800 text-white p-4 rounded-xl border border-slate-700 outline-none focus:border-blue-500" placeholder="YouTube URL" value={videoForm.youtubeUrl || ''} onChange={e => setVideoForm({...videoForm, youtubeUrl: e.target.value})} />
                   </div>
                 )}
              </div>
              <div className="mt-8 flex gap-3">
                 <button onClick={() => {
                    if (contentSubTab === 'products') editingId ? updateProduct(editingId, productForm) : addProduct(productForm as Product);
-                   else if (contentSubTab === 'blog') editingId ? updatePost(editingId, postForm) : addPost(postForm as BlogPost);
+                   else if (contentSubTab === 'blog') {
+                      const excerpt = postForm.excerpt || postForm.content?.substring(0, 150) + '...' || '';
+                      const data = { ...postForm, excerpt, date: postForm.date || new Date().toLocaleDateString('el-GR') };
+                      editingId ? updatePost(editingId, data) : addPost(data as BlogPost);
+                   }
                    else editingId ? updateVideo(editingId, videoForm) : addVideo(videoForm as Video);
                    resetForms();
-                }} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold">Kaydet</button>
-                <button onClick={resetForms} className="bg-slate-800 text-slate-300 px-8 py-3 rounded-xl">İptal</button>
+                }} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-500 transition-all">
+                  <Check size={18} /> Kaydet
+                </button>
+                <button onClick={resetForms} className="bg-slate-800 text-slate-300 px-8 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-slate-700 transition-all">
+                  <X size={18} /> İptal
+                </button>
              </div>
           </div>
         )}
@@ -153,6 +220,75 @@ const Admin: React.FC = () => {
     </div>
   );
 
+  const renderSettings = () => (
+    <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in">
+      <div className="bg-[#0f172a] border border-slate-800/50 p-8 rounded-[32px] shadow-xl">
+        <div className="flex items-center gap-3 mb-6">
+          <Github className="text-white h-8 w-8" />
+          <h3 className="text-xl font-serif font-bold text-white">GitHub Entegrasyonu</h3>
+        </div>
+        <p className="text-slate-500 text-sm mb-6 leading-relaxed">
+          Sitede yaptığınız değişikliklerin herkes tarafından görünmesi için GitHub bilgilerinizi girin. 
+          Bu bilgiler tarayıcınızda saklanır.
+        </p>
+        
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">GitHub Kullanıcı Adı (Owner)</label>
+            <input 
+              value={githubForm.owner} 
+              onChange={e => setGithubForm({...githubForm, owner: e.target.value})} 
+              className="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 text-white focus:border-blue-500 outline-none" 
+              placeholder="örn: vedatdelek"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Repo Adı</label>
+            <input 
+              value={githubForm.repo} 
+              onChange={e => setGithubForm({...githubForm, repo: e.target.value})} 
+              className="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 text-white focus:border-blue-500 outline-none" 
+              placeholder="örn: astrology-site"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Personal Access Token</label>
+            <input 
+              type="password"
+              value={githubForm.token} 
+              onChange={e => setGithubForm({...githubForm, token: e.target.value})} 
+              className="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 text-white focus:border-blue-500 outline-none" 
+              placeholder="ghp_..."
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-3 mt-8">
+            <button 
+              onClick={() => {
+                updateGithubConfig(githubForm);
+                alert('Ayarlar tarayıcıya kaydedildi!');
+              }}
+              className="flex-1 bg-blue-600 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-blue-500 transition-all"
+            >
+              <Save size={18} /> Yapılandırmayı Kaydet
+            </button>
+            <button 
+              onClick={handleFetchFromGithub}
+              disabled={isFetching}
+              className="flex-1 bg-slate-700 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-slate-600 transition-all disabled:opacity-50"
+            >
+              <DownloadCloud size={18} className={isFetching ? 'animate-bounce' : ''} /> 
+              {isFetching ? 'İndiriliyor...' : "GitHub'dan Verileri İndir"}
+            </button>
+        </div>
+        <p className="text-center text-[10px] text-slate-500 mt-4 italic">
+            * Eğer verileriniz görünmüyorsa veya başka bir cihazdan işlem yaptıysanız "İndir" butonunu kullanın.
+        </p>
+      </div>
+    </div>
+  );
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#020617] flex items-center justify-center p-6">
@@ -173,7 +309,7 @@ const Admin: React.FC = () => {
        {activeTab === 'ai-settings' && <AiSettingsView />}
        {activeTab === 'logs' && <LogsView />}
        {activeTab === 'content' && renderContentManager()}
-       {activeTab === 'settings' && <div className="text-slate-500 italic p-10">Ayarlar yakında eklenecek.</div>}
+       {activeTab === 'settings' && renderSettings()}
     </AdminLayout>
   );
 };

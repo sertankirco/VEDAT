@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { useContent } from '../context/ContentContext';
-import { Calendar, ArrowRight, X } from 'lucide-react';
+import { Calendar, ArrowRight, X, ImageOff } from 'lucide-react';
 import { BlogPost } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -28,43 +27,59 @@ const Blog: React.FC = () => {
           <p className="text-slate-600 font-medium">{t.blog.subtitle}</p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {posts.map((post) => {
-            const content = getPostContent(post);
-            return (
-              <article key={post.id} className="bg-white border border-blue-100 rounded-xl overflow-hidden hover:shadow-2xl hover:border-blue-300 transition-all hover:-translate-y-1 flex flex-col shadow-lg">
-                <div className="h-48 overflow-hidden cursor-pointer" onClick={() => setSelectedPost(post)}>
-                  <img 
-                    src={post.imageUrl} 
-                    alt={content.title} 
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                  />
-                </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="flex items-center text-xs text-blue-500 font-bold mb-3">
-                    <Calendar className="h-3 w-3 mr-1" />
-                    {post.date}
+        {posts.length === 0 ? (
+           <div className="text-center py-20 bg-slate-50 rounded-2xl border border-slate-100">
+             <p className="text-slate-500 font-medium">Henüz bir blog yazısı eklenmemiş.</p>
+           </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {posts.map((post) => {
+              const content = getPostContent(post);
+              return (
+                <article key={post.id} className="bg-white border border-blue-100 rounded-xl overflow-hidden hover:shadow-2xl hover:border-blue-300 transition-all hover:-translate-y-1 flex flex-col shadow-lg">
+                  <div className="h-48 overflow-hidden cursor-pointer bg-slate-100 relative" onClick={() => setSelectedPost(post)}>
+                    {post.imageUrl ? (
+                      <img 
+                        src={post.imageUrl} 
+                        alt={content.title} 
+                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none';
+                          (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                        }}
+                      />
+                    ) : null}
+                    {/* Fallback for broken or missing images */}
+                    <div className={`absolute inset-0 flex items-center justify-center text-slate-300 ${post.imageUrl ? 'hidden' : ''}`}>
+                      <ImageOff size={48} />
+                    </div>
                   </div>
-                  <h2 
-                    onClick={() => setSelectedPost(post)}
-                    className="text-xl font-serif text-mystic-dark font-bold mb-3 hover:text-blue-600 transition-colors cursor-pointer"
-                  >
-                    {content.title}
-                  </h2>
-                  <p className="text-slate-600 text-sm mb-6 line-clamp-3 flex-grow font-medium">
-                    {content.excerpt}
-                  </p>
-                  <button 
-                    onClick={() => setSelectedPost(post)}
-                    className="flex items-center text-blue-600 text-sm font-bold hover:text-mystic-dark transition-colors mt-auto"
-                  >
-                    {t.blog.readMore} <ArrowRight className="h-4 w-4 ml-1" />
-                  </button>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="flex items-center text-xs text-blue-500 font-bold mb-3">
+                      <Calendar className="h-3 w-3 mr-1" />
+                      {post.date}
+                    </div>
+                    <h2 
+                      onClick={() => setSelectedPost(post)}
+                      className="text-xl font-serif text-mystic-dark font-bold mb-3 hover:text-blue-600 transition-colors cursor-pointer leading-tight"
+                    >
+                      {content.title || 'Başlıksız Yazı'}
+                    </h2>
+                    <p className="text-slate-600 text-sm mb-6 line-clamp-3 flex-grow font-medium">
+                      {content.excerpt || 'Özet bulunmuyor.'}
+                    </p>
+                    <button 
+                      onClick={() => setSelectedPost(post)}
+                      className="flex items-center text-blue-600 text-sm font-bold hover:text-mystic-dark transition-colors mt-auto"
+                    >
+                      {t.blog.readMore} <ArrowRight className="h-4 w-4 ml-1" />
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
 
         {/* Full Post Modal */}
         {selectedPost && selectedPostContent && (
@@ -77,13 +92,15 @@ const Blog: React.FC = () => {
                 <X className="h-6 w-6" />
               </button>
               
-              <div className="h-64 sm:h-80 w-full relative">
-                <img 
-                  src={selectedPost.imageUrl} 
-                  alt={selectedPostContent.title} 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-mystic-dark/80 to-transparent"></div>
+              <div className="h-64 sm:h-80 w-full relative bg-slate-900">
+                {selectedPost.imageUrl && (
+                  <img 
+                    src={selectedPost.imageUrl} 
+                    alt={selectedPostContent.title} 
+                    className="w-full h-full object-cover opacity-60"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-mystic-dark to-transparent"></div>
                 <div className="absolute bottom-6 left-6 sm:left-10 right-6">
                    <span className="inline-block px-3 py-1 bg-white text-mystic-dark text-xs font-bold rounded mb-2 shadow">
                      {selectedPost.date}
@@ -95,9 +112,11 @@ const Blog: React.FC = () => {
               </div>
 
               <div className="p-6 sm:p-10 prose prose-lg max-w-none text-slate-700">
-                <p className="lead text-xl text-mystic-dark font-medium italic mb-8 border-l-4 border-blue-500 pl-4 bg-blue-50 py-2">
-                  {selectedPostContent.excerpt}
-                </p>
+                {selectedPostContent.excerpt && (
+                  <p className="lead text-xl text-mystic-dark font-medium italic mb-8 border-l-4 border-blue-500 pl-4 bg-blue-50 py-2">
+                    {selectedPostContent.excerpt}
+                  </p>
+                )}
                 <div className="space-y-4 whitespace-pre-wrap">
                   {selectedPostContent.content || (language === 'el' ? "Το περιεχόμενο του άρθρου δεν είναι διαθέσιμο." : "Content not available.")}
                 </div>

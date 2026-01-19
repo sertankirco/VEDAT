@@ -39,6 +39,56 @@ export const INITIAL_SOCIAL_LINKS: SocialLinks = ${JSON.stringify(socialLinks, n
 `;
 };
 
+// Helper to extract JSON from TS file string using Regex
+const extractData = (content: string, variableName: string): any => {
+  try {
+    // Regex matches: export const VARIABLE_NAME: Type = ( ...JSON... );
+    const regex = new RegExp(`export const ${variableName}: [^=]+= ([\\s\\S]*?);`);
+    const match = content.match(regex);
+    if (match && match[1]) {
+      return JSON.parse(match[1]);
+    }
+    return null;
+  } catch (e) {
+    console.error(`Error parsing ${variableName}:`, e);
+    return null;
+  }
+};
+
+export const fetchGithubFile = async (config: GithubConfig, path: string = 'constants.ts') => {
+  const { owner, repo, token } = config;
+  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github.v3+json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Github Connection Failed');
+    }
+
+    const data = await response.json();
+    // Decode Base64 content (UTF-8 safe)
+    const content = decodeURIComponent(escape(atob(data.content)));
+
+    return {
+      posts: extractData(content, 'INITIAL_POSTS') || [],
+      products: extractData(content, 'INITIAL_PRODUCTS') || [],
+      videos: extractData(content, 'INITIAL_VIDEOS') || [],
+      siteImages: extractData(content, 'INITIAL_SITE_IMAGES') || {},
+      socialLinks: extractData(content, 'INITIAL_SOCIAL_LINKS') || {}
+    };
+
+  } catch (error) {
+    console.error('GitHub Fetch Error:', error);
+    throw error;
+  }
+};
+
 export const updateGithubFile = async (
   config: GithubConfig,
   content: string,
